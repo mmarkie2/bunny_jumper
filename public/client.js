@@ -1,6 +1,9 @@
 var socket = io.connect("http://localhost:4000/");
 
 
+
+
+
 class Block {
     constructor(type) {
 
@@ -13,16 +16,16 @@ class Map {
     constructor(map) {
 
         this.blockSize = map.blockSize;
-        this.mapW = map.mapW
-        this.mapH = map.mapH
-        this.blocksPerRow = this.mapW / this.blockSize
+        this.mapBlocksW = map.mapBlocksW
+        this.mapBlocksH = map.mapBlocksH
 
-        this.blocksList = new Array(this.blocksPerRow)
 
-        for (let i = 0; i < this.blocksPerRow; ++i) {
+        this.blocksList = new Array( this.mapBlocksW)
 
-            this.blocksList[i] = new Array(this.blocksPerRow)
-            for (let j = 0; j < this.blocksPerRow; ++j) {
+        for (let i = 0; i <  this.mapBlocksW; ++i) {
+
+            this.blocksList[i] = new Array(this.mapBlocksH)
+            for (let j = 0; j < this.mapBlocksH; ++j) {
 
 
                 this.blocksList[i][j] = new Block(0)
@@ -30,10 +33,10 @@ class Map {
             }
         }
         console.log("this.blocksLists initialized")
-        console.log(this.blocksList)
-        for (let i = 0; i < this.blocksPerRow; ++i) {
+        console.log(map.blocksList)
+        for (let i = 0; i < this.mapBlocksW; ++i) {
 
-            for (let j = 0; j < this.blocksPerRow; ++j) {
+            for (let j = 0; j < this.mapBlocksH; ++j) {
 
 
                 this.blocksList[i][j] = new Block(map.blocksList[i][j].type)
@@ -47,8 +50,8 @@ class Map {
     preRender(ctx)
     {
         var m_canvas = document.createElement('canvas');
-        m_canvas.width = this.mapW;
-        m_canvas.height = this.mapH;
+        m_canvas.width = this.mapBlocksW*this.blockSize;
+        m_canvas.height = this.mapBlocksH*this.blockSize;
         var m_context = m_canvas.getContext("2d");
 
         this.draw(m_context)
@@ -57,19 +60,26 @@ class Map {
     draw(ctx) {
         console.log("map.draw()")
 
-        for (let i = 0; i < this.blocksPerRow; ++i) {
+        for (let i = 0; i < this.mapBlocksW; ++i) {
 
-            for (let j = 0; j < this.blocksPerRow; ++j) {
-
+            for (let j = 0; j < this.mapBlocksH; ++j) {
+                let x = i * this.blockSize;
+                let y = j * this.blockSize;
                 console.log("filling if type ")
-                if (!(this.blocksList[i][j].type === 0)) {
-                    console.log("filling")
-                    ctx.fillStyle = "#dd2c32";
-                    let x = i * this.blockSize;
-                    let y = j * this.blockSize;
-                    //console.log("map.draw() " +  obj.x.toString()+ "  "+obj.y.toString())
-                    ctx.fillRect(x, y, this.blockSize, this.blockSize);
+                if (this.blocksList[i][j].type === 'g') {
+                    ctx.fillStyle = "#30dd3e";
                 }
+                else if (this.blocksList[i][j].type === 'i') {
+                    ctx.fillStyle = "#b2dadd";
+                }
+                else if (this.blocksList[i][j].type === 'w') {
+                    ctx.fillStyle = "#2f32dd";
+                }
+                else
+                {
+                    ctx.fillStyle = "#4ebadd";
+                }
+                ctx.fillRect(x, y, this.blockSize, this.blockSize);
 
             }
         }
@@ -80,19 +90,20 @@ class Map {
 
 class Bunny {
 
-    constructor(x, y, clientId, mapW, mapH, vX, vY, aX, aY, dx) {
+    constructor(x, y, clientId, mapW, mapH,blockSize, vX, vY, aX, aY, dx,isInAir) {
         this.x = x;
         this.y = y;
         this.clientId = clientId;
 
         this.mapW = mapW
         this.mapH = mapH
+        this.blockSize=blockSize
         this.vX = vX;
         this.vY = vY
         this.aX = aX;
         this.aY = aY;
         this.dx = dx;
-
+        this.isInAir = isInAir
     }
 
     update() {
@@ -108,54 +119,23 @@ class Bunny {
 
     }
 
-    moveXAxis(dx) {
-        this.x = this.x + dx;
-        if (this.x < 0) {
-            this.x = 0
-        }
-        if (this.x > this.mapW) {
-            this.x = this.mapW
-        }
+
+
+
+    draw(ctx) {
+        ctx.fillStyle = "#ddaa5f";
+        if (this.isInAir) {
+console.log("in air")
+        ctx.fillStyle = "#dd0fb3";
     }
-
-    moveYAxis(dy) {
-        this.y = this.y + dy;
-        if (this.y < 0) {
-            this.y = 0
-        }
-        if (this.y > this.mapH) {
-            this.y = this.mapH
-        }
-    }
-
-    updatePhysic(pressedKey) {
-
-    }
-    draw(ctx)
-    {
-        ctx.fillStyle = "#30dd3e";
-
         //console.log("map.draw() " +  obj.x.toString()+ "  "+obj.y.toString())
-        ctx.fillRect(this.x, this.y, 20, 20
+        ctx.fillRect(this.x, this.y, this.blockSize, this.blockSize
         );
     }
 
 }
 
-document.addEventListener('keydown', function (event) {
-    let ret = 'N';
-    if (event.keyCode == 37) {
-        ret = 'L';
-    } else if (event.keyCode == 39) {
-        ret = 'R';
-    } else if (event.keyCode == 38) {
-        ret = 'U';
-    } else if (event.keyCode == 40) {
-        ret = 'D';
-    }
-    let pressedKey = ret;
-    socket.emit("keyPressed", pressedKey);
-});
+
 
 class Game {
     constructor(map) {
@@ -166,21 +146,76 @@ class Game {
 
 
         this.canvas = document.getElementById("myCanvas");
+        this.canvas.width=this.map.mapBlocksW*this.map.blockSize
+        this.canvas.height=this.map.mapBlocksH*this.map.blockSize
         this.ctx = this.canvas.getContext("2d");
 
        this.mapPreRender= this.map.preRender(this.ctx)
 
 
-        console.log("req")
-
+        this.pressedKeys={}
+       this. setupKeyListeners()
+        setInterval(()=>{this.update()},50)
 
 
         window. requestAnimationFrame(()=> {this.draw()})
 
     }
+    setupKeyListeners()
+    {
+        document.addEventListener('keydown',  (event)=> {
+            let ret = 'N';
+            if (event.key == 'ArrowLeft') {
+                ret = 'L';
+            } else if (event.key == 'ArrowRight') {
+                ret = 'R';
+            } else if (event.key == 'ArrowUp') {
+                ret = 'U';
+            } else if (event.key == 'ArrowDown') {
+                ret = 'D';
+            }
 
-    gameTick() {
+            this.pressedKeys[ret]=true;
 
+
+
+
+
+            console.log(   Object.keys( this.pressedKeys))
+
+
+
+
+        });
+
+        document.addEventListener('keyup',  (event) =>{
+            let ret = 'N';
+            if (event.key == 'ArrowLeft') {
+                ret = 'L';
+            } else if (event.key == 'ArrowRight') {
+                ret = 'R';
+            } else if (event.key == 'ArrowUp') {
+                ret = 'U';
+            } else if (event.key == 'ArrowDown') {
+                ret = 'D';
+            }
+            console.log( "deleting    "+ ret )
+            console.log(this.pressedKeys)
+            if(ret in this.pressedKeys)
+            delete this.pressedKeys[ret]
+
+        });
+    }
+emitPressedKeys()
+{
+if(Object.keys(this.pressedKeys).length>0)
+{
+    console.log( Object.keys(this.pressedKeys))
+    socket.emit("keyPressed", this.pressedKeys);
+}
+}
+   update() {
+       this.emitPressedKeys()
 
     }
 
@@ -214,8 +249,8 @@ class Game {
 
 
             this.bunnysList.push(new Bunny(bunnysListJson[i].x, bunnysListJson[i].y, bunnysListJson[i].clientId,
-                bunnysListJson[i].mapW, bunnysListJson[i].mapH, bunnysListJson[i].vX, bunnysListJson[i].vY, bunnysListJson[i].aX,
-                bunnysListJson[i].aY, bunnysListJson[i].dx))
+                bunnysListJson[i].mapW, bunnysListJson[i].mapH,this.map.blockSize, bunnysListJson[i].vX, bunnysListJson[i].vY, bunnysListJson[i].aX,
+                bunnysListJson[i].aY, bunnysListJson[i].dx,bunnysListJson[i].isInAir))
         }
     }
 }

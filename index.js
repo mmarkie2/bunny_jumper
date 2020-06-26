@@ -1,5 +1,5 @@
 var express = require('express');
-var socket = require('socket.io');
+let socket = require('socket.io');
 
 // App setup
 var app = express();
@@ -13,58 +13,48 @@ app.use(express.static('public'));
 
 // game
 class Block {
-    constructor(type) {
-//types air=0 grasss=1
+    constructor(type, isFloor) {
+//types air=a grasss=g  water=w ice-i
         this.type = type;
+        this.isFloor = isFloor
     }
 
 }
 
 class Map {
-    constructor(mapW, mapH, blockSize) {
+    constructor(mapBlockW, mapBlockH, blockSize) {
         this.blocksList = []
 
         this.blockSize = blockSize;
-        this.mapW = mapW
-        this.mapH = mapH
-        this.blocksPerRow = this.mapW / this.blockSize
-        for (let i = 0; i < this.blocksPerRow; ++i) {
+        this.mapBlocksW = mapBlockW
+        this.mapBlocksH = mapBlockH
+
+        for (let i = 0; i < this.mapBlocksW; ++i) {
 
             this.blocksList[i] = []
-            for (let j = 0; j < this.blocksPerRow; ++j) {
+            for (let j = 0; j < this.mapBlocksH; ++j) {
 
-                this.blocksList[i][j] = new Block(0)
+                this.blocksList[i][j] = new Block('a', false)
             }
         }
+
+
     }
 
-    addBlock(x, y, type) {
-        this.blocksList.push(new Block(x, y, type))
-    }
 
     mapTemplate() {
 //floor
-        for (let i = 0; i < this.blocksPerRow; ++i) {
 
-            this.blocksList[i][this.blocksPerRow - 1] = new Block(1)
-        }
+        const fs = require('fs');
 
-        for (let i = 0; i < this.blocksPerRow; ++i) {
+        fs.readFile('map.json', (err, data) => {
+            if (err) throw err;
+            this.blocksList = JSON.parse(data);
 
-            this.blocksList[i][0] = new Block(1)
-        }
+        });
 
-        for (let i = 0; i < this.blocksPerRow; ++i) {
-
-            this.blocksList[0][i] = new Block(1)
-            this.blocksList[this.blocksPerRow - 1][i] = new Block(1)
-        }
-
-
-        this.blocksList[2][3] = new Block(1)
     }
 }
-
 class Bunny {
     constructor(x, y, clientId, mapW, mapH) {
         this.x = x;
@@ -73,93 +63,196 @@ class Bunny {
         this.vX = 0;
         this.vY = 0;
         this.aX = 0;
-        this.aY = 0;
-        this.dx = 2
+        this.aY = 0.16;
+        this.dx = 3
+        this.dy = 2
+        this.dv = 2
         ;
         this.mapW = mapW
         this.mapH = mapH
+
+
         this.friction = 0.5
+
+
+        this.pressedKey = 'N'
+        this.lastPpressedKey = 'N'
+        this.pressedKeyMultiplyier = 3
+        this.pressedKeyIter = 0
+        this.isInAir = false
+        this.jumpCounter=0
+
     }
 
-    update(map) {
-        this.colisionDetection(map)
+    update(map,bunniesList) {
+        this.move()
+        this.updatePhysic()
+        this.colisionDetection(map,bunniesList)
+
+
     }
 
-    updateKey(pressedKey) {
-        if (pressedKey === 'L') {
-            this.x = this.x - this.dx
-        } else if (pressedKey === 'R') {
-            this.x = this.x + this.dx
-        } else if (pressedKey === 'U') {
-            this.y = this.y - this.dx
-        } else if (pressedKey === 'D') {
-            this.y = this.y + this.dx
+    move() {
+
+
+        // console.log("this.pressedKey:  " + this.pressedKey)
+
+let timeout=200;
+        let timeWindow=60;
+        for (let [key, value] of Object.entries(this.pressedKey)) {
+            // console.log("this.pressedKey:  " + key)
+            if (key === 'N') {
+                continue
+            } else if (key === 'L') {
+                this.x = this.x - this.dx
+            } else if (key === 'R') {
+                this.x = this.x + this.dx
+            } else if (key === 'U' ) {
+                console.log(this.jumpCounter)
+                if(this.jumpCounter===0 && this.isInAir === false)
+                {
+
+                    setTimeout(()=>{this.jumpCounter=1; console.log(" this.jumpCounter===1 !!!!!!!!!!!!!!!!!!!!!!! " )}, timeout)
+                    setTimeout(()=>{this.jumpCounter=0 ;console.log(" this.jumpCounter===0 !!!!!!!!!!!!!!!!!!!!!!! " )},timeout+ timeWindow)
+
+                    this.vY = -5
+                }
+                if(this.jumpCounter===1 )
+                {
+
+                    setTimeout(()=>{this.jumpCounter=0; console.log(" this.jumpCounter===1 !!!!!!!!!!!!!!!!!!!!!!! " )}, timeout)
+                    setTimeout(()=>{this.jumpCounter=0 ;console.log(" this.jumpCounter===0 !!!!!!!!!!!!!!!!!!!!!!! " )},timeout+ timeWindow)
+
+                    this.vY = this.vY-1
+                }
+                if(this.jumpCounter===2)
+                {
+                    this.jumpCounter=0
+                    this.vY = this.vY-1
+
+                }
+            } else if (key === 'D') {
+                this.y = this.y + this.dx
+            }
+        }
+        if (this.pressedKeyIter < this.pressedKeyMultiplyier) {
+            this.pressedKeyIter++
+        } else {
+
+            this.pressedKey = {}
+            this.pressedKey['N'] = true
+            this.lastPpressedKey= this.pressedKey
+            this.pressedKeyIter = 0
+            this.pressedKeyMultiplyier = 3
         }
     }
 
 
-    moveXAxis(dx) {
-        this.x = this.x + dx;
-        if (this.x < 0) {
-            this.x = 0
-        }
-        if (this.x > this.mapW) {
-            this.x = this.mapW
-        }
+    setPressedKey(pressedKey) {
+        this.pressedKey = pressedKey
     }
+    hitDetectionWithBunnies(map,bunniesList)
+    {
+        if(bunniesList==null)
+        {
+            bunniesList=[]
+        }
+for (let bunnysIter of bunniesList)
+{
+   if( bunnysIter.clientId!==this.clientId)
+   {
+       //top
+       let isTop = false, isBot = false, isLeft = false, isRight = false
+       if (this.y < bunnysIter.y + map.blockSize) {
+           isTop = true
+       }
+       //bot
+       if (this.y + map.blockSize > bunnysIter.y) {
+           isBot = true
+       }
+       //left
+       if (this.x + map.blockSize >bunnysIter.x) {
+           isLeft = true
+       }
+       //right
+       if (this.x < bunnysIter.x + map.blockSize) {
+           isRight = true
+       }
 
-    moveYAxis(dy) {
-        this.y = this.y + dy;
-        if (this.y < 0) {
-            this.y = 0
-        }
-        if (this.y > this.mapH) {
-            this.y = this.mapH
-        }
+       if(isLeft && isRight &&  isBot)
+       {
+           let offset = map.blockSize * 1 / 2
+
+           if (isTop && isBot) {
+
+               //bot
+               if (this.y + map.blockSize - offset > bunnysIter.y + map.blockSize) {
+
+                   console.log("IM HIT============================================IM HIT")
+               }
+           }
+
+
+
+       }
+   }
+}
+
     }
+//colision and is in air
+    colisionDetection(map,bunniesList) {
 
-    colisionDetection(m) {
-        for (let i = 0; i < m.blocksPerRow; ++i) {
+        //colision with bunnies
+       this. hitDetectionWithBunnies(map,bunniesList)
+
+        //colision with blocks
+
+        this.isInAir = true;
+        for (let i = 0; i < map.mapBlocksW; ++i) {
 
 
-            for (let j = 0; j < m.blocksPerRow; ++j) {
+            for (let j = 0; j < map.mapBlocksH; ++j) {
 
-                let blocksIter = m.blocksList[i][j]
-                if (blocksIter.type !== 0) {
-                    let iterX = i * m.blockSize
-                    let iterY = j * m.blockSize
+                let blocksIter = map.blocksList[i][j]
+                if (blocksIter.type !== 'a') {
+                    let iterX = i * map.blockSize
+                    let iterY = j * map.blockSize
+
+                    //isInAir
+
+
                     //top
                     let isTop = false, isBot = false, isLeft = false, isRight = false
-                    if (this.y < iterY + m.blockSize) {
+                    if (this.y < iterY + map.blockSize) {
                         isTop = true
                     }
                     //bot
-                    if (this.y + m.blockSize > iterY) {
+                    if (this.y + map.blockSize > iterY) {
                         isBot = true
                     }
                     //left
-                    if (this.x + m.blockSize > iterX) {
+                    if (this.x + map.blockSize > iterX) {
                         isLeft = true
                     }
                     //right
-                    if (this.x < iterX + m.blockSize) {
+                    if (this.x < iterX + map.blockSize) {
                         isRight = true
                     }
 
-let offset= m.blockSize*2/3
-                    let isFinalTop=false,isFinalBot=false,isFinalLeft=false,isFinalRight=false;
+                    let offset = map.blockSize * 1 / 2
+                    let isFinalTop = false, isFinalBot = false, isFinalLeft = false, isFinalRight = false;
                     if ((isLeft && isRight)) {
 
                         if (isTop && isBot) {
                             //top
-                            if (this.y+offset < iterY) {
-                                console.log("top")
-                                isFinalTop=true
+                            if (this.y + offset < iterY) {
+
+                                isFinalTop = true
                             }
                             //bot
-                            if (this.y +m.blockSize-offset> iterY+m.blockSize) {
-                                console.log("bot")
-                                isFinalBot=true
+                            if (this.y + map.blockSize - offset > iterY + map.blockSize) {
+
+                                isFinalBot = true
                             }
                         }
 
@@ -169,34 +262,37 @@ let offset= m.blockSize*2/3
 
                         if (isLeft && isRight) {
                             //left
-                            if (this.x+offset < iterX) {
-                                console.log("left")
-                                isFinalLeft=true
+                            if (this.x + offset < iterX) {
+
+                                isFinalLeft = true
                             }
                             //right
-                            if (this.x  +m.blockSize-offset> iterX+m.blockSize) {
-                                console.log("right")
-                                isFinalRight=true
+                            if (this.x + map.blockSize - offset > iterX + map.blockSize) {
+
+                                isFinalRight = true
                             }
                         }
 
                     }
 
-                    if(isFinalTop)
-                    {
-                        this.y=iterY-m.blockSize
+                    if (isFinalTop) {
+                        if (blocksIter.isFloor === true) {
+                          //  console.log("on the floor")
+                            this.isInAir = false;
+                            this.vY = 0
+                        }
+                        this.y = iterY - map.blockSize
                     }
-                    if(isFinalBot)
-                    {
-                        this.y=iterY+m.blockSize
+
+                    if (isFinalBot) {
+                        this.y = iterY + map.blockSize
+                        this.vY = 0
                     }
-                    if(isFinalLeft)
-                    {
-                        this.x=iterX-m.blockSize
+                    if (isFinalLeft && !isFinalTop) {
+                        this.x = iterX - map.blockSize
                     }
-                    if(isFinalRight)
-                    {
-                        this.x=iterX+m.blockSize
+                    if (isFinalRight && !isFinalTop) {
+                        this.x = iterX + map.blockSize
                     }
 
                 }
@@ -208,51 +304,79 @@ let offset= m.blockSize*2/3
 
 
     updatePhysic() {
-        this.vX = this.vX + this.aX * this.dx;
-        this.vY = this.vY + this.aY * this.dx;
+
+
+        this.vX = this.vX + this.aX * this.dv;
+        this.vY = this.vY + this.aY * this.dv;
+
 
         this.x = this.x + this.vX * this.dx;
-        this.y = this.y + this.vY * this.dx;
+     //   console.log("y delta: " + this.vY * this.dy)
+        this.y = this.y + this.vY * this.dy;
+
+
     }
 
 }
 
 
 // Socket setup & pass server
-var io = socket(server);
-let bunnysList = []
-mapWidth = 600
-mapHeight = 600
-blockSize = 20
-map = new Map(mapWidth, mapHeight, blockSize)
-map.mapTemplate();
-io.on('connection', (socket) => {
 
-    console.log('made socket connection', socket.id);
-    bunnysList.push(new Bunny(20, 20, socket.id, mapWidth, mapHeight))
-    socket.emit("map", map)
-    socket.emit("bunnysList", bunnysList)
-    socket.on("keyPressed", function (pressedKey) {
-        console.log(socket.id + " pressed: " + pressedKey);
+class Game {
+    constructor() {
+        this.io = socket(server);
+        this.bunnysList = []
+        this.mapBlocksW = 23
+        this.mapBlocksH = 22
+        this.blockSize = 30
+        this.map = new Map(this.mapBlocksW, this.mapBlocksH , this.blockSize)
+        this.map.mapTemplate();
+        this.socketsList = []
 
-        bunnysList.find(function (elem) {
-            return elem.clientId === socket.id;
-        }).updateKey(pressedKey)
+        this.io.on('connection', (socket) => {
+            this.socketsList.push(socket)
+            console.log('made socket connection', socket.id);
+            this.bunnysList.push(new Bunny(3* this.blockSize,
+                this.mapBlocksH * this.blockSize- 5* this.blockSize,
+                socket.id, this.mapBlocksW* this.blockSize ,this.mapBlocksH * this.blockSize,this))
+            socket.emit("map", this.map)
+            socket.emit("bunnysList", this.bunnysList)
+            socket.on("keyPressed", (pressedKey) => {
+                console.log(socket.id + " pressed: ");
+                console.log(pressedKey);
+                this.bunnysList.find(function (elem) {
+                    return elem.clientId === socket.id;
+                }).setPressedKey(pressedKey)
 
-        socket.emit("bunnysList", bunnysList)
-    });
-});
 
-function sendPositionsData() {
+            });
+        });
+
+
+        setInterval(() => {
+            this.update()
+        }, 33);
+
+    }
+
+
+    update() {
+        for (let bunnysListElement of this.bunnysList) {
+            bunnysListElement.update(this.map,this.bunnysList)
+        }
+        for (let iter of this.socketsList) {
+            iter.emit("bunnysList", this.bunnysList)
+        }
+    }
 
 }
 
-function onTimerTick() {
-    bunnysList.forEach(function (elem) {
-        elem.update(map)
-    })
-}
+let game = new Game()
 
-setInterval(onTimerTick, 400);
+
+
+
+
+
 
 
