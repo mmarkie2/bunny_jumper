@@ -2,119 +2,119 @@
   [
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     }
   ],
   [
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
 
 
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "a",
@@ -134,7 +134,7 @@
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "a",
@@ -818,7 +818,7 @@
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
@@ -910,7 +910,7 @@
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
@@ -962,7 +962,7 @@
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "a",
@@ -1050,11 +1050,11 @@
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "a",
@@ -1078,7 +1078,7 @@
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "a",
@@ -1134,15 +1134,15 @@
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "a",
@@ -1166,11 +1166,11 @@
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "a",
@@ -1230,7 +1230,7 @@
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "a",
@@ -1258,103 +1258,11 @@
     },
     {
       "type": "g",
-      "isFloor": false
-    },
-    {
-      "type": "g",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "g",
       "isFloor": true
     },
     {
       "type": "g",
       "isFloor": true
-    }
-  ],
-  [
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-
-
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "g",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "g",
-      "isFloor": true
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "g",
-      "isFloor": true
-    },
-    {
-      "type": "g",
-      "isFloor": false
     },
     {
       "type": "a",
@@ -1413,8 +1321,8 @@
       "isFloor": false
     },
     {
-      "type": "a",
-      "isFloor": false
+      "type": "g",
+      "isFloor": true
     },
     {
       "type": "a",
@@ -1427,10 +1335,6 @@
     {
       "type": "g",
       "isFloor": true
-    },
-    {
-      "type": "a",
-      "isFloor": false
     },
     {
       "type": "a",
@@ -1449,6 +1353,14 @@
       "isFloor": true
     },
     {
+      "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
       "type": "a",
       "isFloor": false
     },
@@ -1462,11 +1374,7 @@
     },
     {
       "type": "g",
-      "isFloor": false
-    },
-    {
-      "type": "g",
-      "isFloor": false
+      "isFloor": true
     }
   ],
   [
@@ -1549,16 +1457,16 @@
       "isFloor": false
     },
     {
-      "type": "i",
+      "type": "g",
       "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     }
   ],
   [
@@ -1589,8 +1497,8 @@
       "isFloor": false
     },
     {
-      "type": "g",
-      "isFloor": true
+      "type": "a",
+      "isFloor": false
     },
     {
       "type": "a",
@@ -1646,11 +1554,103 @@
     },
     {
       "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    }
+  ],
+  [
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+
+
+    {
+      "type": "a",
       "isFloor": false
     },
     {
       "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "a",
       "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "i",
+      "isFloor": true
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "g",
+      "isFloor": true
     }
   ],
   [
@@ -1738,11 +1738,11 @@
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     }
   ],
   [
@@ -1830,11 +1830,11 @@
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     }
   ],
   [
@@ -1894,7 +1894,7 @@
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "a",
@@ -1918,15 +1918,15 @@
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     }
   ],
   [
@@ -1970,145 +1970,145 @@
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     }
   ],
   [
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     },
     {
       "type": "g",
-      "isFloor": false
+      "isFloor": true
     }
   ]
 ]
