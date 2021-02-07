@@ -8,8 +8,10 @@ class Lobby {
     lobbyId
     sockets
     game
-maxRounds=5
-    roundsCounter=0
+    maxRounds = 5
+    roundsCounter = 0
+isGameStarted=false
+
     constructor(ownerPlayer) {
 
 
@@ -21,84 +23,93 @@ maxRounds=5
             this.lobbyId = ownerPlayer.id;
             this.players.push(ownerPlayer);
             this.sendLobbyInit(ownerSocket);
-            ownerSocket.on("startGameRequest", () => {
-               this. startNewGame();
 
+
+            ownerSocket.on("startGameRequest", () => {
+                this.isGameStarted=true
+                this.startNewRound();
+                ownerSocket.removeAllListeners("startGameRequest");
             });
         }
 
     }
-startNewGame()
-{
-    this.game = new gameModule.Game(this.players,this);
-}
-    static clientConstructor(inviteUrl,socket) {
-        this.socket=socket;
+
+    startNewRound() {
+        this.game = new gameModule.Game(this.players, this);
+    }
+
+    static clientConstructor(inviteUrl, socket, isClientLobbyOwner) {
+
         let ret = new Lobby(null);
-        this.socket.on("players", (players) => {
+        ret.socket=socket;
+        ret.socket.on("players", (players) => {
             ret.players = players;
             ret.clientShowPlayers(players);
 
         });
-        document.getElementById("startGame").onclick = () => {
-            this.socket.emit("startGameRequest");
-        };
-        $("#inviteUrl").val(inviteUrl);
-        this.socket.on("map",  (m)=> {
+
+
+        ret.socket.on("map", (m) => {
             console.log(m)
             console.log("map received")
 
-           this.clientSideGame=  new ClientSideGame(m, this.socket);
+            ret.clientSideGame = new ClientSideGame(m, ret.socket);
 
         });
-        this.socket.on("endRound",  ()=> {
+        ret.socket.on("endRound", () => {
             console.log("endRound received")
-            this.clientSideGame.destructor()
+            ret.clientSideGame.destructor()
 
         });
-
+        ret.clientDisplayLobbyMenu(inviteUrl,isClientLobbyOwner);
 
         return ret;
     }
 
 
     sendLobbyInit(socket) {
-let inviteUrl="http://127.0.0.1:4000/invite/"+this.lobbyId;
-        socket.emit("lobbyInit",inviteUrl);
-        this.sendPlayers(socket)
+        let inviteUrl = "http://127.0.0.1:4000/invite/" + this.lobbyId;
+        socket.emit("lobbyInit", inviteUrl);
+        this.emitPlayers(socket)
     }
 
-    sendPlayers(socket) {
+    emitPlayers(socket) {
         //change server players with socket field to lightweight  version
         let playersSocketless = [];
         for (let player of this.players) {
-            playersSocketless.push(new playerSocketlessModule.PlayerSocketless(player.nick, player.id))
+            playersSocketless.push(new playerSocketlessModule.PlayerSocketless(player.nick, player.id, player.score))
         }
         socket.emit("players", playersSocketless);
 
     }
 
 
-
-    addPlayer(player ) {
+    addPlayer(player) {
         this.players.push(player);
         this.sendLobbyInit(player.socket);
         for (let playerIter of this.players) {
-            this.sendPlayers(playerIter.socket)
+            this.emitPlayers(playerIter.socket)
         }
     }
-    endRound(winnerPlayerSocketId)
-    {
+
+    endRound(winnerPlayerSocketId) {
         for (let playerIter of this.players) {
             playerIter.socket.emit("endRound")
         }
-        if( this.roundsCounter<this.maxRounds)
-        {
+        this.updateScoreboard(winnerPlayerSocketId)
+        if (this.roundsCounter < this.maxRounds) {
             console.log("Winner")
-           this.startNewGame();
+            this.startNewRound();
             this.roundsCounter++;
         }
 
+    }
+    updateScoreboard(winnerPlayerSocketId)
+    {
+        this.players.find(x=>x.socket.id===winnerPlayerSocketId) && this.players.find(x=>x.socket.id===winnerPlayerSocketId).score++;
+        for (let playerIter of this.players) {
+            this.emitPlayers(playerIter.socket)
+        }
     }
     clientShowLobbyScreen() {
 
@@ -108,11 +119,38 @@ let inviteUrl="http://127.0.0.1:4000/invite/"+this.lobbyId;
         $("#players").empty();
         for (let player of this.players) {
 
-            $("#players").append("<p>" + player.nick +  player.id+"</p>");
+            $("#players").append("<p>" + player.nick + player.id +"   score:   "+player.score+ "</p>");
         }
     }
-    clientDisplayLobbyMenu()
-    {
+
+    clientDisplayLobbyMenu(inviteUrl) {
+        let visibility='visible'
+        if(!isClientLobbyOwner)
+        {
+          visibility='hidden';
+        }
+        $("#menu").empty()
+        $("#menu").append(
+            "<input id=\"inviteUrl\" >\n" +
+            "<button id=\"copyInviteUrl\" >copy invite url</button >\n" +
+            "<button id=\"startGame\" style='visibility:" +visibility+"'> start Game</button>\n" +
+            "<div id=\"players\"></div>");
+
+        $("#startGame").click( () => {
+            this.socket.emit("startGameRequest");
+        })
+        $("#inviteUrl").val(inviteUrl);
+        $("#copyInviteUrl").click(() => {
+            /* Get the text field */
+            let copyText = document.getElementById("inviteUrl");
+
+            /* Select the text field */
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+            /* Copy the text inside the text field */
+            document.execCommand("copy");
+        })
 
     }
 }

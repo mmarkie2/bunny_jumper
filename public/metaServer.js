@@ -52,7 +52,14 @@ class MetaServer {
                     if (player) {
                         let lobby = this.lobbys.find(x => x.lobbyId === lobbyId);
                         if (lobby) {
-                            lobby.addPlayer(player);
+                            if(lobby.isGameStarted===false)
+                            {
+                                lobby.addPlayer(player);
+                            }
+                           else
+                            {
+                                console.log('lobby is closed ', lobbyId);
+                            }
                         } else {
                             console.log('lobby doesnt exists ', lobbyId);
                         }

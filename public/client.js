@@ -4,7 +4,7 @@ var socket = io.connect("http://localhost:4000/");
 let game
 let lobby;
 let isPlayerCreated = false;
-
+let isClientLobbyOwner=false;
 function createPlayer() {
     if (isPlayerCreated === false) {
         let lobbyId = document.getElementById("lobbyId").value;
@@ -25,18 +25,19 @@ document.getElementById("createPlayer").onclick = () => {
     createPlayer();
 };
 
-socket.on("lobbyInit", (inviteUrl)=> {
-    lobby = Lobby.clientConstructor(inviteUrl,socket);
+socket.on("lobbyInit", (inviteUrl) => {
+    lobby = Lobby.clientConstructor(inviteUrl, socket,isClientLobbyOwner);
 
 });
-function displayGameTypeMenu()
-{
+
+function displayGameTypeMenu() {
     $("#menu").empty()
-    $("#menu").append( "<button id=\"createLobby\"> create lobby</button>" );
+    $("#menu").append("<button id=\"createLobby\"> create lobby</button>");
     document.getElementById("createLobby").onclick = () => {
 
 
         socket.emit("createLobbyRequest");
+         isClientLobbyOwner=true;
     };
 }
 

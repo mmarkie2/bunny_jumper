@@ -11,35 +11,28 @@
     <link rel="stylesheet" type="text/css" href="../public/style.css">
 </head>
 <body>
+<div id="canvasAndMenu">
+    <canvas id="myCanvas" width="600" height="600"></canvas>
 
-<canvas id="myCanvas" width="600" height="600"></canvas>
-
-<div id="menu">
+    <div id="menu">
 <textarea id="nick"  rows="1" cols="10">
 Uzyt</textarea>
-    <button id="createPlayer"> create player</button>
+        <button id="createPlayer"> create player</button>
+    </div>
 </div>
 
-<textarea id="lobbyId" ><%= lobbyId %></textarea>
-<input id="inviteUrl" >
-<button id="copyInviteUrl" >copy Url</button >
-<script>
-    $("#copyInviteUrl").click(()=>{
-        /* Get the text field */
-        let copyText = document.getElementById("inviteUrl");
-
-        /* Select the text field */
-        copyText.select();
-        copyText.setSelectionRange(0, 99999); /* For mobile devices */
-
-        /* Copy the text inside the text field */
-        document.execCommand("copy");
-    })
-</script>
 
 
-<button id="startGame"> start Game</button>
-<div id="players"></div>
+<!--hidden lobby id field used to store id of lobby if invited by url-->
+<textarea id="lobbyId"  style=" visibility: hidden;" ><%= lobbyId %></textarea>
+
+
+<style>
+    #canvasAndMenu{
+        display:flex;
+        flex-direction: row;
+    }
+</style>
 <script > function require(arg)
     {
 

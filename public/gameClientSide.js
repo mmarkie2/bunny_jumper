@@ -1,15 +1,16 @@
 class ClientSideGame {
 
     gameLoopIntervalId
-   isRequestAnimationStopped
+    isRequestAnimationStopped
     map
     bunnysList
-    constructor(map,socket) {
+
+    constructor(map, socket) {
 
         this.map = Map.clientConstructor(map);
-  this.socket=  socket;
+        this.socket = socket;
         this.bunnysList = [];
-        this.bunniesListListener= (bunniesListJson) =>{
+        this.bunniesListListener = (bunniesListJson) => {
 
             this.updateBunnysList(bunniesListJson)
 
@@ -27,11 +28,11 @@ class ClientSideGame {
 
         this.pressedKeys = {}
         this.setupKeyListeners()
-        this.gameLoopIntervalId=setInterval(() => {
+        this.gameLoopIntervalId = setInterval(() => {
             this.update()
         }, 50)
 
-        this.isRequestAnimationStopped=false;
+        this.isRequestAnimationStopped = false;
         window.requestAnimationFrame(() => {
             this.draw()
         })
@@ -40,7 +41,7 @@ class ClientSideGame {
 
     setupKeyListeners() {
 
-        this.keydownListener=(event) => {
+        this.keydownListener = (event) => {
             let ret = 'N';
             if (event.key == 'ArrowLeft') {
                 ret = 'L';
@@ -62,7 +63,7 @@ class ClientSideGame {
         document.addEventListener('keydown', this.keydownListener);
 
 
-       this. keyupListener=(event) => {
+        this.keyupListener = (event) => {
             let ret = 'N';
             if (event.key == 'ArrowLeft') {
                 ret = 'L';
@@ -79,7 +80,7 @@ class ClientSideGame {
                 delete this.pressedKeys[ret]
 
         };
-        document.addEventListener('keyup',  this. keyupListener)
+        document.addEventListener('keyup', this.keyupListener)
     }
 
     emitPressedKeys() {
@@ -96,12 +97,11 @@ class ClientSideGame {
 
 
     draw() {
-        console.log("this.isRequestAnimationStopped",this.isRequestAnimationStopped)
-if(this.isRequestAnimationStopped===true)
-{
-    console.log("this.isRequestAnimationStopped===true")
-    return;
-}
+        console.log("this.isRequestAnimationStopped", this.isRequestAnimationStopped)
+        if (this.isRequestAnimationStopped === true) {
+            console.log("this.isRequestAnimationStopped===true")
+            return;
+        }
         console.log(this)
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -114,7 +114,7 @@ if(this.isRequestAnimationStopped===true)
         }
 
 
-        this.requestAnimationFrameId=window.requestAnimationFrame(() => {
+        this.requestAnimationFrameId = window.requestAnimationFrame(() => {
             this.draw()
         })
         ;
@@ -132,15 +132,15 @@ if(this.isRequestAnimationStopped===true)
                 bunnysListJson[i].aY, bunnysListJson[i].dx, bunnysListJson[i].isInAir))
         }
     }
-    destructor()
-    {
+
+    destructor() {
         console.log(" endGame()")
-        this.isRequestAnimationStopped=true;
+        this.isRequestAnimationStopped = true;
 
         clearInterval(this.gameLoopIntervalId);
         this.socket.removeAllListeners("bunniesList");
-        document.removeEventListener('keydown',this.keydownListener);
-        document.removeEventListener('keyup',this.keyupListener);
+        document.removeEventListener('keydown', this.keydownListener);
+        document.removeEventListener('keyup', this.keyupListener);
 
     }
 }

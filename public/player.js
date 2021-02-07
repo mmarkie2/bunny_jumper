@@ -3,11 +3,13 @@ class Player {
     nick
     socket
     id
-   keyPressedListenerId
+    score
+
     constructor(nick, socket, id) {
         this.nick = nick;
         this.socket = socket;
         this.id = id;
+        this.score=0;
     }
 }
 

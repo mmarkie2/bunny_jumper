@@ -10,9 +10,10 @@ class Game {
     mapBlocksH
     blockSize
     map
-    constructor(players,parentLobby) {
+
+    constructor(players, parentLobby) {
         this.players = players;
-    this.parentLobby=parentLobby;
+        this.parentLobby = parentLobby;
         this.bunniesList = []
         this.mapBlocksW = 23
         this.mapBlocksH = 22
@@ -37,18 +38,18 @@ class Game {
             player.socket.emit("bunniesList", this.bunniesList)
             player.socket.on("keyPressed", (pressedKey) => {
                 let a;
-                this.bunniesList.find(x=> x.clientSocketId===player.socket.id).setPressedKey(pressedKey)
+                this.bunniesList.find(x => x.clientSocketId === player.socket.id).setPressedKey(pressedKey)
 
-            } )
+            })
         }
 
 
-       this. gameLoopIntervalId= setInterval(() => {
+        this.gameLoopIntervalId = setInterval(() => {
             this.update()
         }, 33);
 
         //end game if longer then 5 minute
-        setTimeout(()=>this.destructor(null), 1000*3);
+        setTimeout(() => this.destructor(null), 1000 * 7);
 
     }
 
@@ -58,10 +59,9 @@ class Game {
                 console.log("destroyed by " + bunniesListElement.deafeatedBy)
                 let idx = this.bunniesList.indexOf(bunniesListElement)
                 this.bunniesList.splice(idx, 1);
-if( this.bunniesList.length==1)
-{
-this.destructor(this.bunniesList[0].playerSocketId);
-}
+                if (this.bunniesList.length == 1) {
+                    this.destructor(this.bunniesList[0].clientSocketId);
+                }
 
             }
 
@@ -79,9 +79,9 @@ this.destructor(this.bunniesList[0].playerSocketId);
             iter.socket.emit("bunniesList", this.bunniesList)
         }
     }
-    destructor(winnerPlayerSocketId)
-    {
-        console.log("game ended",winnerPlayerSocketId)
+
+    destructor(winnerPlayerSocketId) {
+        console.log("game ended, winner", winnerPlayerSocketId)
 
         for (let player of this.players) {
             player.socket.removeAllListeners("keyPressed");
