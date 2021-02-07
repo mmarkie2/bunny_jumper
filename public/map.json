@@ -110,8 +110,6 @@
       "type": "g",
       "isFloor": true
     },
-
-
     {
       "type": "g",
       "isFloor": true
@@ -202,8 +200,6 @@
       "type": "g",
       "isFloor": true
     },
-
-
     {
       "type": "g",
       "isFloor": true
@@ -294,8 +290,6 @@
       "type": "a",
       "isFloor": false
     },
-
-
     {
       "type": "a",
       "isFloor": false
@@ -386,8 +380,6 @@
       "type": "a",
       "isFloor": false
     },
-
-
     {
       "type": "a",
       "isFloor": false
@@ -478,8 +470,6 @@
       "type": "a",
       "isFloor": false
     },
-
-
     {
       "type": "a",
       "isFloor": false
@@ -543,282 +533,6 @@
     {
       "type": "a",
       "isFloor": false
-    },
-    {
-          "type": "g",
-      "isFloor": true
-    }
-  ],
-  [
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-
-
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-          "type": "g",
-      "isFloor": true
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-          "type": "g",
-      "isFloor": true
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-          "type": "g",
-      "isFloor": true
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-          "type": "g",
-      "isFloor": true
-    }
-  ],
-  [
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-
-
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-          "type": "g",
-      "isFloor": true
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-          "type": "g",
-      "isFloor": true
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-          "type": "g",
-      "isFloor": true
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-          "type": "g",
-      "isFloor": true
-    }
-  ],
-  [
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-
-
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "g",
-      "isFloor": true
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "a",
-      "isFloor": false
-    },
-    {
-      "type": "g",
-      "isFloor": true
-    },
-    {
-      "type": "g",
-      "isFloor": true
     },
     {
       "type": "g",
@@ -846,8 +560,186 @@
       "type": "a",
       "isFloor": false
     },
-
-
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    }
+  ],
+  [
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    }
+  ],
+  [
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
     {
       "type": "a",
       "isFloor": false
@@ -938,8 +830,96 @@
       "type": "a",
       "isFloor": false
     },
-
-
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    },
+    {
+      "type": "g",
+      "isFloor": true
+    }
+  ],
+  [
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
+    {
+      "type": "a",
+      "isFloor": false
+    },
     {
       "type": "a",
       "isFloor": false
@@ -1030,8 +1010,6 @@
       "type": "a",
       "isFloor": false
     },
-
-
     {
       "type": "a",
       "isFloor": false
@@ -1122,8 +1100,6 @@
       "type": "a",
       "isFloor": false
     },
-
-
     {
       "type": "a",
       "isFloor": false
@@ -1214,8 +1190,6 @@
       "type": "a",
       "isFloor": false
     },
-
-
     {
       "type": "a",
       "isFloor": false
@@ -1306,8 +1280,6 @@
       "type": "a",
       "isFloor": false
     },
-
-
     {
       "type": "a",
       "isFloor": false
@@ -1398,8 +1370,6 @@
       "type": "a",
       "isFloor": false
     },
-
-
     {
       "type": "a",
       "isFloor": false
@@ -1490,8 +1460,6 @@
       "type": "a",
       "isFloor": false
     },
-
-
     {
       "type": "a",
       "isFloor": false
@@ -1582,8 +1550,6 @@
       "type": "a",
       "isFloor": false
     },
-
-
     {
       "type": "a",
       "isFloor": false
@@ -1674,8 +1640,6 @@
       "type": "a",
       "isFloor": false
     },
-
-
     {
       "type": "a",
       "isFloor": false
@@ -1766,8 +1730,6 @@
       "type": "a",
       "isFloor": false
     },
-
-
     {
       "type": "a",
       "isFloor": false
@@ -1858,8 +1820,6 @@
       "type": "a",
       "isFloor": false
     },
-
-
     {
       "type": "a",
       "isFloor": false
@@ -1950,8 +1910,6 @@
       "type": "a",
       "isFloor": false
     },
-
-
     {
       "type": "a",
       "isFloor": false

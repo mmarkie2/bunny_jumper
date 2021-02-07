@@ -13,11 +13,31 @@
 <body>
 
 <canvas id="myCanvas" width="600" height="600"></canvas>
-<div id="lobbyId" ><%= lobbyId %></div>
+
+<div id="menu">
 <textarea id="nick"  rows="1" cols="10">
 Uzyt</textarea>
-<button id="createPlayer"> create player</button>
-<button id="createLobby"> create lobby</button>
+    <button id="createPlayer"> create player</button>
+</div>
+
+<textarea id="lobbyId" ><%= lobbyId %></textarea>
+<input id="inviteUrl" >
+<button id="copyInviteUrl" >copy Url</button >
+<script>
+    $("#copyInviteUrl").click(()=>{
+        /* Get the text field */
+        let copyText = document.getElementById("inviteUrl");
+
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+    })
+</script>
+
+
 <button id="startGame"> start Game</button>
 <div id="players"></div>
 <script > function require(arg)

@@ -1,98 +1,119 @@
-let playerModule=require('./player');
-let gameModule=require('./game');
-let playerSocketlessModule=require('./playerSocketless');
+let playerModule = require('./player');
+let gameModule = require('./game');
+let playerSocketlessModule = require('./playerSocketless');
+
 class Lobby {
     ownerId
     players
-    roomId
+    lobbyId
     sockets
     game
+maxRounds=5
+    roundsCounter=0
     constructor(ownerPlayer) {
 
 
         this.players = [];
-this.game=null;
+        this.game = null;
         if (ownerPlayer) {
-            let ownerSocket=  ownerPlayer.socket;
-            this.ownerId = ownerSocket.id;
-            this.roomId = this.generateRoomId();
-           this.players.push(new playerModule.Player(ownerSocket.id,ownerSocket));
+            let ownerSocket = ownerPlayer.socket;
+            this.ownerId = ownerPlayer.id;
+            this.lobbyId = ownerPlayer.id;
+            this.players.push(ownerPlayer);
             this.sendLobbyInit(ownerSocket);
-            ownerSocket.on("startGameRequest",  ()=> {
-                this.game=new  gameModule.Game(this.players);
+            ownerSocket.on("startGameRequest", () => {
+               this. startNewGame();
 
             });
         }
 
     }
-
-    static clientConstructor() {
-        let ret =new Lobby(null);
-        socket.on("players",  (players)=> {
-            ret.players=players;
-            ret. clientShowPlayers(players);
+startNewGame()
+{
+    this.game = new gameModule.Game(this.players,this);
+}
+    static clientConstructor(inviteUrl,socket) {
+        this.socket=socket;
+        let ret = new Lobby(null);
+        this.socket.on("players", (players) => {
+            ret.players = players;
+            ret.clientShowPlayers(players);
 
         });
         document.getElementById("startGame").onclick = () => {
-            socket.emit("startGameRequest");
+            this.socket.emit("startGameRequest");
         };
-        socket.on("map", function (m) {
+        $("#inviteUrl").val(inviteUrl);
+        this.socket.on("map",  (m)=> {
             console.log(m)
             console.log("map received")
-            game = new Game(m)
+
+           this.clientSideGame=  new ClientSideGame(m, this.socket);
 
         });
-        socket.on("bunnysList", function (bunnysListJson) {
-            console.log(typeof bunnysListJson)
-            console.log(bunnysListJson)
-            game.updateBunnysList(bunnysListJson)
+        this.socket.on("endRound",  ()=> {
+            console.log("endRound received")
+            this.clientSideGame.destructor()
 
         });
+
 
         return ret;
     }
 
-    generateRoomId() {
-        this.roomId = this.ownerId;
-    }
 
     sendLobbyInit(socket) {
-
-        socket.emit("lobbyInit");
-       this. sendPlayers(socket)
+let inviteUrl="http://127.0.0.1:4000/invite/"+this.lobbyId;
+        socket.emit("lobbyInit",inviteUrl);
+        this.sendPlayers(socket)
     }
+
     sendPlayers(socket) {
-     //change server players with socket field to lightweight  version
-        let playersSocketless=[];
-for (let player of this.players)
-{
-    playersSocketless.push(new playerSocketlessModule.PlayerSocketless(player.nick, player.socket.id))
-}
-        socket.emit("players",playersSocketless);
+        //change server players with socket field to lightweight  version
+        let playersSocketless = [];
+        for (let player of this.players) {
+            playersSocketless.push(new playerSocketlessModule.PlayerSocketless(player.nick, player.id))
+        }
+        socket.emit("players", playersSocketless);
 
     }
-    startGame() {
-        for (let player of this.players)
-        {
 
-          player.socket.emit("startGame")
+
+
+    addPlayer(player ) {
+        this.players.push(player);
+        this.sendLobbyInit(player.socket);
+        for (let playerIter of this.players) {
+            this.sendPlayers(playerIter.socket)
         }
     }
-
-    addPlayer() {
+    endRound(winnerPlayerSocketId)
+    {
+        for (let playerIter of this.players) {
+            playerIter.socket.emit("endRound")
+        }
+        if( this.roundsCounter<this.maxRounds)
+        {
+            console.log("Winner")
+           this.startNewGame();
+            this.roundsCounter++;
+        }
 
     }
-
     clientShowLobbyScreen() {
 
     }
 
     clientShowPlayers() {
-        for (let player of this.players)
-        {
+        $("#players").empty();
+        for (let player of this.players) {
 
-            $( "#players" ).append( "<p>"+player.nick+"</p>" );
+            $("#players").append("<p>" + player.nick +  player.id+"</p>");
         }
+    }
+    clientDisplayLobbyMenu()
+    {
+
     }
 }
 

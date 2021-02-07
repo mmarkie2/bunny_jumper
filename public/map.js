@@ -108,7 +108,6 @@ class Map {
     mapTemplate() {
 
 
-
         // fs.readFile('./public/map.json', (err, data) => {
         //     if (err) throw err;
         //     this.blocksList = JSON.parse(data);
@@ -116,7 +115,7 @@ class Map {
         // });
         let rawdata = fs.readFileSync('./public/map.json');
         this.blocksList = JSON.parse(rawdata);
-let a;
+        let a;
     }
 
 

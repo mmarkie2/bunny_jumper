@@ -1,11 +1,22 @@
-class Game {
-    constructor(map) {
+class ClientSideGame {
+
+    gameLoopIntervalId
+   isRequestAnimationStopped
+    map
+    bunnysList
+    constructor(map,socket) {
 
         this.map = Map.clientConstructor(map);
-
+  this.socket=  socket;
         this.bunnysList = [];
+        this.bunniesListListener= (bunniesListJson) =>{
 
+            this.updateBunnysList(bunniesListJson)
 
+        };
+        this.socket.on("bunniesList", this.bunniesListListener);
+
+        //prepering canvas for game engine
         this.canvas = document.getElementById("myCanvas");
         this.canvas.width = this.map.mapBlocksW * this.map.blockSize
         this.canvas.height = this.map.mapBlocksH * this.map.blockSize
@@ -16,11 +27,11 @@ class Game {
 
         this.pressedKeys = {}
         this.setupKeyListeners()
-        setInterval(() => {
+        this.gameLoopIntervalId=setInterval(() => {
             this.update()
         }, 50)
 
-
+        this.isRequestAnimationStopped=false;
         window.requestAnimationFrame(() => {
             this.draw()
         })
@@ -28,7 +39,8 @@ class Game {
     }
 
     setupKeyListeners() {
-        document.addEventListener('keydown', (event) => {
+
+        this.keydownListener=(event) => {
             let ret = 'N';
             if (event.key == 'ArrowLeft') {
                 ret = 'L';
@@ -46,9 +58,11 @@ class Game {
             console.log(Object.keys(this.pressedKeys))
 
 
-        });
+        }
+        document.addEventListener('keydown', this.keydownListener);
 
-        document.addEventListener('keyup', (event) => {
+
+       this. keyupListener=(event) => {
             let ret = 'N';
             if (event.key == 'ArrowLeft') {
                 ret = 'L';
@@ -59,18 +73,19 @@ class Game {
             } else if (event.key == 'ArrowDown') {
                 ret = 'D';
             }
-            console.log("deleting    " + ret)
+
             console.log(this.pressedKeys)
             if (ret in this.pressedKeys)
                 delete this.pressedKeys[ret]
 
-        });
+        };
+        document.addEventListener('keyup',  this. keyupListener)
     }
 
     emitPressedKeys() {
         if (Object.keys(this.pressedKeys).length > 0) {
             console.log(Object.keys(this.pressedKeys))
-            socket.emit("keyPressed", this.pressedKeys);
+            this.socket.emit("keyPressed", this.pressedKeys);
         }
     }
 
@@ -81,8 +96,13 @@ class Game {
 
 
     draw() {
-
-        console.log("Game.draw()")
+        console.log("this.isRequestAnimationStopped",this.isRequestAnimationStopped)
+if(this.isRequestAnimationStopped===true)
+{
+    console.log("this.isRequestAnimationStopped===true")
+    return;
+}
+        console.log(this)
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -94,7 +114,7 @@ class Game {
         }
 
 
-        window.requestAnimationFrame(() => {
+        this.requestAnimationFrameId=window.requestAnimationFrame(() => {
             this.draw()
         })
         ;
@@ -111,5 +131,16 @@ class Game {
                 bunnysListJson[i].aX,
                 bunnysListJson[i].aY, bunnysListJson[i].dx, bunnysListJson[i].isInAir))
         }
+    }
+    destructor()
+    {
+        console.log(" endGame()")
+        this.isRequestAnimationStopped=true;
+
+        clearInterval(this.gameLoopIntervalId);
+        this.socket.removeAllListeners("bunniesList");
+        document.removeEventListener('keydown',this.keydownListener);
+        document.removeEventListener('keyup',this.keyupListener);
+
     }
 }

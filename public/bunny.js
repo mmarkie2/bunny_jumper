@@ -1,10 +1,10 @@
 class Bunny {
-    constructor(positionsHistory, clientId, mapW, mapH) {
+    constructor(positionsHistory, clientSocketId, mapW, mapH) {
 
         this.positionsHistoryLength = 5;
         this.positionsHistory = positionsHistory;
 
-        this.clientId = clientId;
+        this.clientSocketId = clientSocketId;
         this.vX = 0;
         this.vY = 0;
         this.aX = 0;
@@ -31,10 +31,10 @@ class Bunny {
     }
 
     //client constructor
-    static clientConstructor(positionsHistory, clientId, mapW, mapH, vX, vY, aX, aY, dx, isInAir) {
-        let bunny = new Bunny(positionsHistory, clientId, mapW, mapH);
+    static clientConstructor(positionsHistory, clientSocketId, mapW, mapH, vX, vY, aX, aY, dx, isInAir) {
+        let bunny = new Bunny(positionsHistory, clientSocketId, mapW, mapH);
 
-        bunny.clientId = clientId;
+        bunny.clientSocketId = clientSocketId;
 
         bunny.mapW = mapW
         bunny.mapH = mapH
@@ -148,7 +148,7 @@ class Bunny {
             bunniesList = []
         }
         for (let bunnysIter of bunniesList) {
-            if (bunnysIter.clientId !== this.clientId) {
+            if (bunnysIter.clientSocketId !== this.clientSocketId) {
                 //top
                 let isTop = false, isBot = false, isLeft = false, isRight = false
                 if (this.getY() < bunnysIter.getY() + map.blockSize) {
@@ -173,7 +173,7 @@ class Bunny {
                     //bot
                     if (this.getY() > bunnysIter.getY() + offset) {
 
-                        this.deafeatedBy = bunnysIter.clientId;
+                        this.deafeatedBy = bunnysIter.clientSocketId;
                     }
 
 
