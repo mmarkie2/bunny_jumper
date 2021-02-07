@@ -17,8 +17,8 @@ class MetaServer {
         this.app.use(express.static('public'));
         this.app.set("view engine", "ejs");
 
-        this.server = this.app.listen(4000, function () {
-            console.log('listening for requests on port 4000,');
+        this.server = this.app.listen(process.env.PORT || 8080 , function () {
+            console.log('listening for requests on port 8080,');
         });
         this.io = socket(this.server);
         this.socketsList = [];
