@@ -49,7 +49,7 @@ class Game {
         }, 33);
 
         //end game if longer then 5 minute
-        setTimeout(() => this.destructor(null), 1000 * 7);
+        this.gameLoopTimeoutId=setTimeout(() => this.destructor(null), 1000 * 7);
 
     }
 
@@ -82,6 +82,8 @@ class Game {
 
     destructor(winnerPlayerSocketId) {
         console.log("game ended, winner", winnerPlayerSocketId)
+        //clearing timeout because game ended by player winning
+        clearTimeout(this.gameLoopTimeoutId);
 
         for (let player of this.players) {
             player.socket.removeAllListeners("keyPressed");

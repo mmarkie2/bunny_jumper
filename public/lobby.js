@@ -1,7 +1,7 @@
 let playerModule = require('./player');
 let gameModule = require('./game');
 let playerSocketlessModule = require('./playerSocketless');
-
+let GLOBALModule=require('./../GLOBAL')
 class Lobby {
     ownerId
     players
@@ -68,7 +68,7 @@ isGameStarted=false
 
 
     sendLobbyInit(socket) {
-        let inviteUrl = "http://127.0.0.1:4000/invite/" + this.lobbyId;
+        let inviteUrl = GLOBALModule.GLOBAL.BASE_URL+"/invite/" + this.lobbyId;
         socket.emit("lobbyInit", inviteUrl);
         this.emitPlayers(socket)
     }
