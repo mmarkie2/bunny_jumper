@@ -24,7 +24,7 @@ class MetaServer {
         this.socketsList = [];
         this.players = [];
         this.lobbys = [];
-
+//
         this.routesInit();
 
         this.io.on('connection', (socket) => {
