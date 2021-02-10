@@ -32,7 +32,7 @@ socket.on("lobbyInit", (inviteUrl) => {
 
 function displayGameTypeMenu() {
     $("#menu").empty()
-    $("#menu").append("<button id=\"createLobby\"> create lobby</button>");
+    $("#menu").append("<button id=\"createLobby\" class=\"btn btn-success\"> create lobby</button>");
     document.getElementById("createLobby").onclick = () => {
 
 

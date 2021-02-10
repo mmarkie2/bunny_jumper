@@ -1,7 +1,7 @@
 let socketModule = require('socket.io');
 let bunnyModule = require('./bunny')
 let mapModule = require('./map')
-
+let GLOBALModule=require('./../GLOBAL')
 
 class Game {
     gameLoopIntervalId
@@ -35,6 +35,7 @@ class Game {
             i = i + 2;
 
             player.socket.emit("map", this.map)
+            player.socket.emit("roundTimeInSeconds", GLOBALModule.GLOBAL.ROUND_LENGTH_SECONDS)
             player.socket.emit("bunniesList", this.bunniesList)
             player.socket.on("keyPressed", (pressedKey) => {
                 let a;
@@ -49,7 +50,7 @@ class Game {
         }, 33);
 
         //end game if longer then 5 minute
-        this.gameLoopTimeoutId=setTimeout(() => this.destructor(null), 1000 * 7);
+        this.gameLoopTimeoutId=setTimeout(() => this.destructor(null), 1000 * GLOBALModule.GLOBAL.ROUND_LENGTH_SECONDS);
 
     }
 

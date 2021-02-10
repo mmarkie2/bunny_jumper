@@ -117,9 +117,10 @@ isGameStarted=false
 
     clientShowPlayers() {
         $("#players").empty();
+        $("#players").append("<p  >" +"rank:"+ "</p>");
         for (let player of this.players) {
 
-            $("#players").append("<p>" + player.nick + player.id +"   score:   "+player.score+ "</p>");
+            $("#players").append("<p  class=\"btn btn-secondary disabled\">" + player.nick + player.id +"   score:   "+player.score+ "</p>");
         }
     }
 
@@ -131,10 +132,13 @@ isGameStarted=false
         }
         $("#menu").empty()
         $("#menu").append(
-            "<input id=\"inviteUrl\" >\n" +
-            "<button id=\"copyInviteUrl\" >copy invite url</button >\n" +
-            "<button id=\"startGame\" style='visibility:" +visibility+"'> start Game</button>\n" +
-            "<div id=\"players\"></div>");
+            "<div >invite url:<br><input id=\"inviteUrl\" >" +
+
+
+            "<button id=\"copyInviteUrl\" class=\"btn btn-success\">copy invite url</button >\n" +
+            "</div>\n" +
+            "<button id=\"startGame\" class=\"btn btn-success\" style='visibility:" +visibility+"'> start Game</button>\n" +
+            "<div id=\"players\"  class=\"border border-success rounded-lg\"></div>");
 
         $("#startGame").click( () => {
             this.socket.emit("startGameRequest");

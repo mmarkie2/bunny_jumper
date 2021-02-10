@@ -1,6 +1,7 @@
 
 let GLOBAL={
-      BASE_URL :"https://ulrabunnies.herokuapp.com"
+      BASE_URL :"https://ulrabunnies.herokuapp.com",
+      ROUND_LENGTH_SECONDS:60,
 }
 
 

@@ -18,7 +18,7 @@ class ClientSideGame {
         this.socket.on("bunniesList", this.bunniesListListener);
 
         //prepering canvas for game engine
-        this.canvas = document.getElementById("myCanvas");
+        this.canvas = document.getElementById("gameCanvas");
         this.canvas.width = this.map.mapBlocksW * this.map.blockSize
         this.canvas.height = this.map.mapBlocksH * this.map.blockSize
         this.ctx = this.canvas.getContext("2d");
