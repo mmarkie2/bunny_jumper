@@ -11,6 +11,7 @@ class Lobby {
     maxRounds = 5
     roundsCounter = 0
 isGameStarted=false
+colorPool
 
     constructor(ownerPlayer) {
 
@@ -21,7 +22,12 @@ isGameStarted=false
             let ownerSocket = ownerPlayer.socket;
             this.ownerId = ownerPlayer.id;
             this.lobbyId = ownerPlayer.id;
-            this.players.push(ownerPlayer);
+            this.colorPool=["#FF5733",
+                "#FF33E6",
+                "#E8F616",
+                "#091A6A",]
+
+            this.addPlayer(ownerPlayer);
             this.sendLobbyInit(ownerSocket);
 
 
@@ -52,7 +58,7 @@ isGameStarted=false
         ret.socket.on("map", (m) => {
             console.log(m)
             console.log("map received")
-
+           ret. clientDisplayInGameMenu();
             ret.clientSideGame = new ClientSideGame(m, ret.socket);
 
         });
@@ -77,7 +83,7 @@ isGameStarted=false
         //change server players with socket field to lightweight  version
         let playersSocketless = [];
         for (let player of this.players) {
-            playersSocketless.push(new playerSocketlessModule.PlayerSocketless(player.nick, player.id, player.score))
+            playersSocketless.push(new playerSocketlessModule.PlayerSocketless(player.nick, player.id,player.color, player.score))
         }
         socket.emit("players", playersSocketless);
 
@@ -85,10 +91,24 @@ isGameStarted=false
 
 
     addPlayer(player) {
+        let availableColor;
+        let i=0;
+        do
+        {
+            availableColor=this.colorPool[i]
+            i++;
+        }
+        while(this.players.find(x=>x.color===availableColor))
+
+        player.color=availableColor;
         this.players.push(player);
         this.sendLobbyInit(player.socket);
         for (let playerIter of this.players) {
             this.emitPlayers(playerIter.socket)
+        }
+        if(this.players.length===4)
+        {
+            this.isGameStarted=true;
         }
     }
 
@@ -120,7 +140,8 @@ isGameStarted=false
         $("#players").append("<p  >" +"rank:"+ "</p>");
         for (let player of this.players) {
 
-            $("#players").append("<p  class=\"btn btn-secondary disabled\">" + player.nick + player.id +"   score:   "+player.score+ "</p>");
+            $("#players").append("<p  class=\"btn btn-secondary disabled\" style='font-size:25px;color:"+player.color
+                +"'>" + player.nick + player.id +"   score:   "+player.score+ "</p>");
         }
     }
 
@@ -157,6 +178,17 @@ isGameStarted=false
         })
 
     }
+    clientDisplayInGameMenu() {
+
+        $("#menu").empty()
+        $("#menu").append(
+
+            "<div id=\"players\"  class=\"border border-success rounded-lg\"></div>")
+
+
+        this.clientShowPlayers();
+    }
+
 }
 
 module.exports.Lobby = Lobby;

@@ -10,7 +10,7 @@ class Game {
     mapBlocksH
     blockSize
     map
-
+    positionPool
     constructor(players, parentLobby) {
         this.players = players;
         this.parentLobby = parentLobby;
@@ -21,18 +21,31 @@ class Game {
         this.map = mapModule.Map.serverConstructor(this.mapBlocksW, this.mapBlocksH, this.blockSize)
         this.map.mapTemplate();
 
-
+this.positionPool=[{
+    x: 3* this.blockSize,
+    y: this.mapBlocksH * this.blockSize - 4 * this.blockSize
+},
+    {
+        x: 11* this.blockSize,
+        y: this.mapBlocksH * this.blockSize - 4 * this.blockSize
+    },
+    {
+        x: 4* this.blockSize,
+        y:  5 * this.blockSize
+    },
+    {
+        x: 17* this.blockSize,
+        y:  8 * this.blockSize
+    }
+    ]
         let i = 0;
         for (let player of players) {
             let positionHistory = [];
-            positionHistory.push({
-                x: (3 + i) * this.blockSize,
-                y: this.mapBlocksH * this.blockSize - 4 * this.blockSize
-            });
-
+            positionHistory.push(this.positionPool[i]);
+            i++;
             this.bunniesList.push(new bunnyModule.Bunny(positionHistory,
-                player.socket.id, this.mapBlocksW * this.blockSize, this.mapBlocksH * this.blockSize, this))
-            i = i + 2;
+                player.socket.id, this.mapBlocksW * this.blockSize, this.mapBlocksH * this.blockSize,player.color))
+
 
             player.socket.emit("map", this.map)
             player.socket.emit("roundTimeInSeconds", GLOBALModule.GLOBAL.ROUND_LENGTH_SECONDS)

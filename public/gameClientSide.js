@@ -129,7 +129,7 @@ class ClientSideGame {
             this.bunnysList.push(Bunny.clientConstructor(bunnysListJson[i].positionsHistory, bunnysListJson[i].clientId,
                 bunnysListJson[i].mapW, bunnysListJson[i].mapH, bunnysListJson[i].vX, bunnysListJson[i].vY,
                 bunnysListJson[i].aX,
-                bunnysListJson[i].aY, bunnysListJson[i].dx, bunnysListJson[i].isInAir))
+                bunnysListJson[i].aY, bunnysListJson[i].dx, bunnysListJson[i].isInAir, bunnysListJson[i].color))
         }
     }
 

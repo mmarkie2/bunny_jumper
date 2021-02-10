@@ -1,5 +1,5 @@
 class Bunny {
-    constructor(positionsHistory, clientSocketId, mapW, mapH) {
+    constructor(positionsHistory, clientSocketId, mapW, mapH, color) {
 
         this.positionsHistoryLength = 5;
         this.positionsHistory = positionsHistory;
@@ -15,7 +15,7 @@ class Bunny {
         ;
         this.mapW = mapW
         this.mapH = mapH
-
+this.color=color
 
         this.friction = 0.5
 
@@ -31,13 +31,15 @@ class Bunny {
     }
 
     //client constructor
-    static clientConstructor(positionsHistory, clientSocketId, mapW, mapH, vX, vY, aX, aY, dx, isInAir) {
+    static clientConstructor(positionsHistory, clientSocketId, mapW, mapH, vX, vY, aX, aY, dx, isInAir,color) {
         let bunny = new Bunny(positionsHistory, clientSocketId, mapW, mapH);
 
         bunny.clientSocketId = clientSocketId;
 
         bunny.mapW = mapW
         bunny.mapH = mapH
+        bunny.color=color
+
 
         bunny.vX = vX;
         bunny.vY = vY
@@ -314,11 +316,8 @@ class Bunny {
     //client side
 
     draw(ctx, blockSize) {
-        ctx.fillStyle = "#ddaa5f";
-        if (this.isInAir) {
-            console.log("in air")
-            ctx.fillStyle = "#dd0fb3";
-        }
+        ctx.fillStyle = this.color;
+
         //console.log("map.draw() " +  obj.x.toString()+ "  "+obj.y.toString())
         ctx.fillRect(this.getX(), this.getY(), blockSize, blockSize
         );

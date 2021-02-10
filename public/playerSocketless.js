@@ -3,11 +3,12 @@ class PlayerSocketless {
     nick
     id
     score
-
-    constructor(nick, id,score) {
+color
+    constructor(nick, id,color,score) {
 
         this.nick = nick;
         this.id = id;
+        this.color=color;
         this.score=score;
     }
 }

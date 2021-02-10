@@ -18,7 +18,7 @@
     <canvas id="gameCanvas" width="690" height="660" ></canvas>
     </div>
     <div id="menu"   class="border border-success rounded-lg">
-<textarea id="nick"  rows="1" cols="10">
+<textarea id="nick"  rows="1" cols="15">
 Uzyt</textarea>
         <button id="createPlayer" class="btn btn-success"> create player</button>
     </div>
@@ -31,6 +31,8 @@ Uzyt</textarea>
 
 
 <style>
+    html, body{height: 100%; width: 100%}
+    body{overflow: hidden}
     #canvasAndMenu{
         display:flex;
         flex-direction: row;
@@ -44,11 +46,16 @@ padding: 20px;
 {
     display:flex;
     flex-direction: column;
+    width: 600px;
 }
     #menu button, input
     {
         margin: 20px;
     }
+    textarea {
+        resize: none;
+    }
+
 </style>
 <script >
     let serverUrl="<%= serverUrl %>";
