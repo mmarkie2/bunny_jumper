@@ -16,6 +16,7 @@
 <div id="canvasAndMenu">
     <div id="canvasDiv"   class="border border-success rounded-lg">
     <canvas id="gameCanvas" width="690" height="660" ></canvas>
+        <div id="overCanvasDiv" class="btn btn-success disabled hiddenElement"></div>
     </div>
     <div id="menu"   class="border border-success rounded-lg">
 <textarea id="nick"  rows="1" cols="15">
@@ -55,6 +56,25 @@ padding: 20px;
     textarea {
         resize: none;
     }
+    #canvasDiv
+    {
+        position: relative;
+    }
+    #gameCanvas
+    {
+
+
+    }
+#overCanvasDiv
+{
+    position:absolute;
+    left:30%;
+    top:40%
+}
+    .hiddenElement
+    {visibility: hidden}
+    .visibleElement
+    {visibility: visible}
 
 </style>
 <script >

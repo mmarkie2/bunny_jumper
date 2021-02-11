@@ -8,18 +8,20 @@ class Lobby {
     lobbyId
     sockets
     game
-    maxRounds = 5
+    maxRounds
     roundsCounter = 0
 isGameStarted=false
 colorPool
-
+    ownerSocket
     constructor(ownerPlayer) {
 
 
         this.players = [];
         this.game = null;
         if (ownerPlayer) {
-            let ownerSocket = ownerPlayer.socket;
+            this.maxRounds = GLOBALModule.GLOBAL.ROUNDS_MAX;
+
+            this.ownerSocket = ownerPlayer.socket;
             this.ownerId = ownerPlayer.id;
             this.lobbyId = ownerPlayer.id;
             this.colorPool=["#FF5733",
@@ -27,15 +29,16 @@ colorPool
                 "#E8F616",
                 "#091A6A",]
 
-            this.addPlayer(ownerPlayer);
-            this.sendLobbyInit(ownerSocket);
+            this.addPlayer( ownerPlayer);
+            this.sendLobbyInit( this.ownerSocket);
 
-
-            ownerSocket.on("startGameRequest", () => {
-                this.isGameStarted=true
-                this.startNewRound();
-                ownerSocket.removeAllListeners("startGameRequest");
-            });
+this.startGameListener= ()=>
+{
+    this.isGameStarted=true
+    this.startNewRound();
+    this. ownerSocket.removeAllListeners("startGameRequest");
+};
+            this. ownerSocket.on("startGameRequest", this.startGameListener);
         }
 
     }
@@ -62,9 +65,15 @@ colorPool
             ret.clientSideGame = new ClientSideGame(m, ret.socket);
 
         });
-        ret.socket.on("endRound", () => {
+        ret.socket.on("endRound", (winnerNick) => {
             console.log("endRound received")
+            ret.clientShowRoundEndScreen(winnerNick)
             ret.clientSideGame.destructor()
+
+        });
+        ret.socket.on("endGame", () => {
+            console.log("endGame received")
+ret.clientShowGameEndScreen();
 
         });
         ret.clientDisplayLobbyMenu(inviteUrl,isClientLobbyOwner);
@@ -113,15 +122,47 @@ colorPool
     }
 
     endRound(winnerPlayerSocketId) {
+        let winnerNick=null;
+        if(winnerPlayerSocketId)
+        {
+            winnerNick= this.players.find(x=>x.socket.id===winnerPlayerSocketId) .nick
+        }
+
         for (let playerIter of this.players) {
-            playerIter.socket.emit("endRound")
+            playerIter.socket.emit("endRound",winnerNick)
         }
         this.updateScoreboard(winnerPlayerSocketId)
         if (this.roundsCounter < this.maxRounds) {
             console.log("Winner")
-            this.startNewRound();
+            setTimeout(()=>this.startNewRound(),1000);
+
             this.roundsCounter++;
         }
+        else
+        {
+            this.endGame()
+        }
+
+    }
+    endGame()
+    {
+        for (let player of this.players) {
+            player.socket.emit("endGame")
+        }
+        let playAgainRequestListener= ()=>
+        {
+            console.log(" playAgainListener")
+            this.ownerSocket.removeAllListeners("playAgainRequest")
+            for (let player of this.players) {
+                player.score=0;
+            }
+            for (let player of this.players) {
+                this.emitPlayers(player.socket)
+            }
+            this.roundsCounter=0;
+            this.startGameListener()
+        }
+       this.ownerSocket.on("playAgainRequest",playAgainRequestListener)
 
     }
     updateScoreboard(winnerPlayerSocketId)
@@ -131,8 +172,15 @@ colorPool
             this.emitPlayers(playerIter.socket)
         }
     }
-    clientShowLobbyScreen() {
+    clientShowRoundEndScreen(winnerPlayer)
+    {
 
+        $("#overCanvasDiv").empty();
+        $("#overCanvasDiv").text(`Round winner: ${winnerPlayer}`);
+        $("#overCanvasDiv").removeClass( "hiddenElement" );
+        setTimeout(()=>{
+            $("#overCanvasDiv").addClass( "hiddenElement" );
+        },2000)
     }
 
     clientShowPlayers() {
@@ -188,7 +236,21 @@ colorPool
 
         this.clientShowPlayers();
     }
+    clientShowGameEndScreen()
+    {
 
+        $("#menu").empty()
+        $("#menu").append(
+
+            "<div id=\"players\"  class=\"border border-success rounded-lg\"></div>"
+        +"<buuton id='playAgain' class='btn btn-success'>Play Again</buuton>")
+
+
+        this.clientShowPlayers();
+        $('#playAgain').click(()=>{
+            this.socket.emit("playAgainRequest");
+        })
+    }
 }
 
 module.exports.Lobby = Lobby;
