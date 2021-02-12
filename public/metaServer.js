@@ -3,7 +3,8 @@ let playerModule = require('./player');
 var express = require('express');
 let socket = require('socket.io');
 const path = require('path');
-let GLOBALModule=require('./../GLOBAL')
+let GLOBALModule = require('./../GLOBAL')
+
 class MetaServer {
 
 
@@ -17,7 +18,7 @@ class MetaServer {
         this.app.use(express.static('public'));
         this.app.set("view engine", "ejs");
 
-        this.server = this.app.listen(process.env.PORT || 8080 , function () {
+        this.server = this.app.listen(process.env.PORT || 8080, function () {
             console.log('listening for requests on port 8080,');
         });
         this.io = socket(this.server);
@@ -52,12 +53,9 @@ class MetaServer {
                     if (player) {
                         let lobby = this.lobbys.find(x => x.lobbyId === lobbyId);
                         if (lobby) {
-                            if(lobby.isGameStarted===false)
-                            {
+                            if (lobby.isGameStarted === false) {
                                 lobby.addPlayer(player);
-                            }
-                           else
-                            {
+                            } else {
                                 console.log('lobby is closed ', lobbyId);
                             }
                         } else {

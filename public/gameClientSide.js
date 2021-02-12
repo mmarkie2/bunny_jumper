@@ -3,19 +3,41 @@ class ClientSideGame {
     gameLoopIntervalId
     isRequestAnimationStopped
     map
-    bunnysList
+    bunniesList
 
     constructor(map, socket) {
 
         this.map = Map.clientConstructor(map);
         this.socket = socket;
-        this.bunnysList = [];
-        this.bunniesListListener = (bunniesListJson) => {
+        this.bunniesList = {};
 
-            this.updateBunnysList(bunniesListJson)
+        let onBunniesInitListener = (bunniesInits) => {
+            console.log("bunniesInits")
+            console.log(bunniesInits)
+            for (let bunniesInit of bunniesInits) {
 
-        };
-        this.socket.on("bunniesList", this.bunniesListListener);
+
+                this.bunniesList[bunniesInit.clientId] = new ClientBunny(bunniesInit.clientId, bunniesInit.bunnyW, bunniesInit.bunnyH, bunniesInit.color);
+          console.log(this.bunniesList)
+            }
+            console.log(this.bunniesList)
+        }
+        this.socket.on("bunniesInits",
+            onBunniesInitListener
+        );
+
+
+        let onBunniesUpdatesListener = (bunniesUpdates) => {
+            for (let bunniesUpdate of bunniesUpdates) {
+
+
+                this.bunniesList[bunniesUpdate.clientId].onNewDataFromServer(bunniesUpdate.positionsHistory);
+            }
+        }
+        this.socket.on("bunniesUpdates",
+            onBunniesUpdatesListener
+        );
+
 
         //prepering canvas for game engine
         this.canvas = document.getElementById("gameCanvas");
@@ -56,9 +78,6 @@ class ClientSideGame {
             this.pressedKeys[ret] = true;
 
 
-            console.log(Object.keys(this.pressedKeys))
-
-
         }
         document.addEventListener('keydown', this.keydownListener);
 
@@ -75,7 +94,7 @@ class ClientSideGame {
                 ret = 'D';
             }
 
-            console.log(this.pressedKeys)
+
             if (ret in this.pressedKeys)
                 delete this.pressedKeys[ret]
 
@@ -85,7 +104,7 @@ class ClientSideGame {
 
     emitPressedKeys() {
         if (Object.keys(this.pressedKeys).length > 0) {
-            console.log(Object.keys(this.pressedKeys))
+
             this.socket.emit("keyPressed", this.pressedKeys);
         }
     }
@@ -97,22 +116,21 @@ class ClientSideGame {
 
 
     draw() {
-        console.log("this.isRequestAnimationStopped", this.isRequestAnimationStopped)
+        // console.log("this.isRequestAnimationStopped", this.isRequestAnimationStopped)
         if (this.isRequestAnimationStopped === true) {
-            console.log("this.isRequestAnimationStopped===true")
+            // console.log("this.isRequestAnimationStopped===true")
             return;
         }
-        console.log(this)
+
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.ctx.drawImage(this.mapPreRender, 0, 0)
 
-        for (let i = 0; i < this.bunnysList.length; ++i) {
 
-            this.bunnysList[i].draw(this.ctx, this.map.blockSize)
+        for (const [key, value] of Object.entries(this.bunniesList)) {
+            value.draw(this.ctx)
         }
-
 
         this.requestAnimationFrameId = window.requestAnimationFrame(() => {
             this.draw()
@@ -121,24 +139,14 @@ class ClientSideGame {
 
     }
 
-    updateBunnysList(bunnysListJson) {
-        this.bunnysList = []
-        for (let i = 0; i < bunnysListJson.length; ++i) {
-
-
-            this.bunnysList.push(Bunny.clientConstructor(bunnysListJson[i].positionsHistory, bunnysListJson[i].clientId,
-                bunnysListJson[i].mapW, bunnysListJson[i].mapH, bunnysListJson[i].vX, bunnysListJson[i].vY,
-                bunnysListJson[i].aX,
-                bunnysListJson[i].aY, bunnysListJson[i].dx, bunnysListJson[i].isInAir, bunnysListJson[i].color))
-        }
-    }
 
     destructor() {
         console.log(" endGame()")
         this.isRequestAnimationStopped = true;
 
         clearInterval(this.gameLoopIntervalId);
-        this.socket.removeAllListeners("bunniesList");
+        this.socket.removeAllListeners("bunniesInits");
+        this.socket.removeAllListeners("bunniesUpdates");
         document.removeEventListener('keydown', this.keydownListener);
         document.removeEventListener('keyup', this.keyupListener);
 

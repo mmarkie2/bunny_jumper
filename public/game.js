@@ -1,7 +1,7 @@
 let socketModule = require('socket.io');
 let bunnyModule = require('./bunny')
 let mapModule = require('./map')
-let GLOBALModule=require('./../GLOBAL')
+let GLOBALModule = require('./../GLOBAL')
 
 class Game {
     gameLoopIntervalId
@@ -11,6 +11,7 @@ class Game {
     blockSize
     map
     positionPool
+
     constructor(players, parentLobby) {
         this.players = players;
         this.parentLobby = parentLobby;
@@ -21,38 +22,39 @@ class Game {
         this.map = mapModule.Map.serverConstructor(this.mapBlocksW, this.mapBlocksH, this.blockSize)
         this.map.mapTemplate();
 
-this.positionPool=[{
-    x: 3* this.blockSize,
-    y: this.mapBlocksH * this.blockSize - 4 * this.blockSize
-},
-    {
-        x: 11* this.blockSize,
-        y: this.mapBlocksH * this.blockSize - 4 * this.blockSize
-    },
-    {
-        x: 4* this.blockSize,
-        y:  5 * this.blockSize
-    },
-    {
-        x: 17* this.blockSize,
-        y:  8 * this.blockSize
-    }
-    ]
+        this.positionPool = [{
+            x: 3 * this.blockSize,
+            y: this.mapBlocksH * this.blockSize - 4 * this.blockSize
+        },
+            {
+                x: 11 * this.blockSize,
+                y: this.mapBlocksH * this.blockSize - 4 * this.blockSize
+            },
+            {
+                x: 4 * this.blockSize,
+                y: 5 * this.blockSize
+            },
+            {
+                x: 17 * this.blockSize,
+                y: 8 * this.blockSize
+            }
+        ]
         let i = 0;
         for (let player of players) {
             let positionHistory = [];
             positionHistory.push(this.positionPool[i]);
             i++;
             this.bunniesList.push(new bunnyModule.Bunny(positionHistory,
-                player.socket.id, this.mapBlocksW * this.blockSize, this.mapBlocksH * this.blockSize,player.color))
+                player.socket.id, this.mapBlocksW * this.blockSize, this.mapBlocksH * this.blockSize, player.color))
 
 
             player.socket.emit("map", this.map)
             player.socket.emit("roundTimeInSeconds", GLOBALModule.GLOBAL.ROUND_LENGTH_SECONDS)
-            player.socket.emit("bunniesList", this.bunniesList)
+            this.emitBunniesInit();
+
             player.socket.on("keyPressed", (pressedKey) => {
                 let a;
-                this.bunniesList.find(x => x.clientSocketId === player.socket.id).setPressedKey(pressedKey)
+                this.bunniesList.find(x => x.clientId === player.socket.id).setPressedKey(pressedKey)
 
             })
         }
@@ -63,7 +65,21 @@ this.positionPool=[{
         }, 33);
 
         //end game if longer then 5 minute
-        this.gameLoopTimeoutId=setTimeout(() => this.destructor(null), 1000 * GLOBALModule.GLOBAL.ROUND_LENGTH_SECONDS);
+        this.gameLoopTimeoutId = setTimeout(() => this.destructor(null), 1000 * GLOBALModule.GLOBAL.ROUND_LENGTH_SECONDS);
+
+    }
+
+    emitBunniesInit() {
+        let bunniesInits = [];
+        for (let bunny of this.bunniesList) {
+            bunniesInits.push(bunny.getBunnyInit())
+        }
+        for (let player of this.players) {
+
+            player.socket.emit("bunniesInits", bunniesInits);
+
+        }
+
 
     }
 
@@ -89,8 +105,12 @@ this.positionPool=[{
         }
         this.checkForBunnyDestroyed();
 
+        let bunniesUpdates = [];
+        for (let bunny of this.bunniesList) {
+            bunniesUpdates.push(bunny.getBunnyUpdate())
+        }
         for (let iter of this.players) {
-            iter.socket.emit("bunniesList", this.bunniesList)
+            iter.socket.emit("bunniesUpdates", bunniesUpdates)
         }
     }
 

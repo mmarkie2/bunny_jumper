@@ -1,55 +1,44 @@
-class Bunny {
-    constructor(positionsHistory, clientId, mapW, mapH, color) {
+class ClientBunny {
 
-        this.positionsHistoryLength = 5;
-        this.positionsHistory = positionsHistory;
+
+    //client constructor
+    constructor(clientId, bunnyW, bunnyH, color) {
+
 
         this.clientId = clientId;
-        this.vX = 0;
-        this.vY = 0;
-        this.aX = 0;
-        this.aY = 0.16;
-        this.dx = 4
-        this.dy = 2
-        this.dv = 2
-        ;
-        this.mapW = mapW
-        this.mapH = mapH
-        this.color = color
+        this.bunnyW = bunnyW;
+        this.bunnyH = bunnyH;
+        this.color = color;
+        this.imageFacingSide='l';
 
-        this.bunnyW = 20;
-        this.bunnyH = 20;
-
-        this.friction = 0.5
-
-
-        this.pressedKey = 'N'
-        this.lastPpressedKey = 'N'
-        this.pressedKeyMultiplyier = 3
-        this.pressedKeyIter = 0
-        this.isInAir = false
-        this.jumpCounter = 0
-
-        this.deafeatedBy = null;
-    }
-
-    getBunnyInit() {
-        return {
-            clientId: this.clientId,
-            bunnyW: this.bunnyW,
-            bunnyH: this.bunnyH,
-            color: this.color,
+        this.img = new Image();
+        if (color === "#FF5733") {
+            this.img.src = 'assets/bunnyPixelRed.png';
+        } else if (color === "#FF33E6") {
+            this.img.src = 'assets/bunnyPixelPink.png';
+        } else if (color === "#E8F616") {
+            this.img.src = 'assets/bunnyPixelYellow.png';
+        } else if (color === "#07070a") {
+            this.img.src = 'assets/bunnyPixelBlack.png';
         }
+
     }
 
-    getBunnyUpdate() {
-        return {
-            clientId: this.clientId,
-            positionsHistory: this.positionsHistory
+    onNewDataFromServer(positionsHistory) {
+let previousX=this.getX();
 
+        this.positionsHistory = positionsHistory;
+        if(previousX<this.getX())//going right
+        {
+this.imageFacingSide='r'
         }
-    }
+        else if(previousX>this.getX())//going left
+        {
+            this.imageFacingSide='l'
+        }
 
+
+    }
 
     changePosition(x, y) {
         if (this.positionsHistory.length >= this.positionsHistoryLength)
@@ -59,11 +48,26 @@ class Bunny {
     }
 
     getX() {
-        return this.positionsHistory[0].x;
+        if(this.positionsHistory)
+        {
+            return this.positionsHistory[0].x;
+        }
+        else
+        {
+            return -100;
+        }
+
     }
 
     getY() {
-        return this.positionsHistory[0].y;
+        if(this.positionsHistory)
+        {
+            return this.positionsHistory[0].y;
+        }
+        else
+        {
+            return -100;
+        }
     }
 
     update(map, bunniesList) {
@@ -151,7 +155,7 @@ class Bunny {
             bunniesList = []
         }
         for (let bunnysIter of bunniesList) {
-            if (bunnysIter.clientSocketId !== this.clientId) {
+            if (bunnysIter.clientSocketId !== this.clientSocketId) {
                 //top
                 let isTop = false, isBot = false, isLeft = false, isRight = false
                 if (this.getY() < bunnysIter.getY() + this.bunnyH) {
@@ -313,11 +317,20 @@ class Bunny {
 
     //client side
 
-    draw(ctx, blockSize) {
+    draw(ctx) {
+        ctx.save();
+       let scaleX=1,
+        scaleOffset=0;
 
+        if(this.imageFacingSide==='r')
+        {
 
-        ctx.drawImage(this.img, this.getX(), this.getY() - this.bunnyH * 0.5, this.bunnyW * 1.5, this.bunnyH * 1.5);
-
+            scaleX=-1;
+            scaleOffset=-this.bunnyW;
+        }
+        ctx .scale(scaleX, 1);
+        ctx.drawImage(this.img, this.getX()*scaleX+scaleOffset, this.getY() - this.bunnyH * 0.5, this.bunnyW * 1.5, this.bunnyH * 1.5);
+        ctx.restore();
 
     }
 

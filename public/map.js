@@ -80,14 +80,14 @@ class Map {
     }
 
     draw(ctx) {
-        console.log("map.draw()")
+
 
         for (let i = 0; i < this.mapBlocksW; ++i) {
 
             for (let j = 0; j < this.mapBlocksH; ++j) {
                 let x = i * this.blockSize;
                 let y = j * this.blockSize;
-                console.log("filling if type ")
+
                 if (this.blocksList[i][j].type === 'g') {
                     ctx.fillStyle = "#30dd3e";
                 } else if (this.blocksList[i][j].type === 'i') {
