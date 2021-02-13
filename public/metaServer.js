@@ -84,9 +84,9 @@ class MetaServer {
 
             res.render("indexMain", {lobbyId: "noLobby", serverUrl: GLOBALModule.GLOBAL.BASE_URL});
         });
-        this.app.get('*', function (req, res) {
-            res.render("indexMain", {lobbyId: "noLobby", serverUrl: GLOBALModule.GLOBAL.BASE_URL});
-        });
+        // this.app.get('*', function (req, res) {
+        //     res.render("indexMain", {lobbyId: "noLobby", serverUrl: GLOBALModule.GLOBAL.BASE_URL});
+        // });
 
 
     }
