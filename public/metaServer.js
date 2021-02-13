@@ -16,6 +16,7 @@ class MetaServer {
 
 // Static files
         this.app.use(express.static('public'));
+
         this.app.set("view engine", "ejs");
 
         this.server = this.app.listen(process.env.PORT || 8080, function () {

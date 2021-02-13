@@ -17,7 +17,7 @@ this.isInAir=true;
             this.isImageLoaded=true;
         }
         if (color === "#FF5733") {
-            this.img.src = 'assets/bunnyPixelRed.png';
+            this.img.src = 'bunnyPixelRed.png';
         } else if (color === "#FF33E6") {
             this.img.src = 'assets/bunnyPixelPink.png';
         } else if (color === "#E8F616") {
