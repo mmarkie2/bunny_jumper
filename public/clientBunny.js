@@ -12,6 +12,10 @@ class ClientBunny {
         this.imageFacingSide='l';
 this.isInAir=true;
         this.img = new Image();
+        this.isImageLoaded=false;
+        this.img.onload=()=>{
+            this.isImageLoaded=true;
+        }
         if (color === "#FF5733") {
             this.img.src = 'assets/bunnyPixelRed.png';
         } else if (color === "#FF33E6") {
@@ -21,6 +25,7 @@ this.isInAir=true;
         } else if (color === "#07070a") {
             this.img.src = 'assets/bunnyPixelBlack.png';
         }
+
 
     }
 
@@ -326,19 +331,24 @@ onJumpListener()
     //client side
 
     draw(ctx) {
-        ctx.save();
-       let scaleX=1,
-        scaleOffset=0;
 
-        if(this.imageFacingSide==='r')
+        if(  this.isImageLoaded===true)
         {
+            ctx.save();
+            let scaleX=1,
+                scaleOffset=0;
 
-            scaleX=-1;
-            scaleOffset=-this.bunnyW;
+            if(this.imageFacingSide==='r')
+            {
+
+                scaleX=-1;
+                scaleOffset=-this.bunnyW;
+            }
+            ctx .scale(scaleX, 1);
+            ctx.drawImage(this.img, this.getX()*scaleX+scaleOffset, this.getY() - this.bunnyH * 0.5, this.bunnyW * 1.5, this.bunnyH * 1.5);
+            ctx.restore();
         }
-        ctx .scale(scaleX, 1);
-        ctx.drawImage(this.img, this.getX()*scaleX+scaleOffset, this.getY() - this.bunnyH * 0.5, this.bunnyW * 1.5, this.bunnyH * 1.5);
-        ctx.restore();
+
 
     }
 
