@@ -54,7 +54,7 @@ class Game {
 
             player.socket.on("keyPressed", (pressedKey) => {
                 let a;
-                this.bunniesList.find(x => x.clientId === player.socket.id).setPressedKey(pressedKey)
+                this.bunniesList.find(x => x.clientId === player.socket.id)?.setPressedKey(pressedKey)
 
             })
         }
@@ -84,13 +84,15 @@ class Game {
     }
 
     checkForBunnyDestroyed() {
-        for (let bunniesListElement of this.bunniesList) {
-            if (bunniesListElement.deafeatedBy != null) {
-                console.log("destroyed by " + bunniesListElement.deafeatedBy)
-                let idx = this.bunniesList.indexOf(bunniesListElement)
+        for (let bunny of this.bunniesList) {
+            if (bunny.deafeatedBy != null) {
+                console.log("destroyed by " + bunny.deafeatedBy)
+
+               this. emitBunnyDestroyed( bunny.clientId);
+                let idx = this.bunniesList.indexOf(bunny)
                 this.bunniesList.splice(idx, 1);
                 if (this.bunniesList.length == 1) {
-                    this.destructor(this.bunniesList[0].clientSocketId);
+                    this.destructor(this.bunniesList[0].clientId);
                 }
 
             }
@@ -98,7 +100,12 @@ class Game {
         }
 
     }
-
+    emitBunnyDestroyed(clientId)
+    {
+        for (let iter of this.players) {
+            iter.socket.emit("bunnyDestroyed", clientId)
+        }
+    }
     update() {
         for (let bunniesListElement of this.bunniesList) {
             bunniesListElement.update(this.map, this.bunniesList)

@@ -31,12 +31,21 @@ class ClientSideGame {
             for (let bunniesUpdate of bunniesUpdates) {
 
 
-                this.bunniesList[bunniesUpdate.clientId].onNewDataFromServer(bunniesUpdate.positionsHistory);
+                this.bunniesList[bunniesUpdate.clientId].onNewDataFromServer(bunniesUpdate.positionsHistory,bunniesUpdate.isInAir);
             }
         }
         this.socket.on("bunniesUpdates",
             onBunniesUpdatesListener
         );
+
+
+        let onBunnyDestroyedListener = (clientId) => {
+            delete  this.bunniesList[clientId];
+        }
+        this.socket.on("bunnyDestroyed",
+            onBunnyDestroyedListener
+        );
+
 
 
         //prepering canvas for game engine
@@ -147,6 +156,9 @@ class ClientSideGame {
         clearInterval(this.gameLoopIntervalId);
         this.socket.removeAllListeners("bunniesInits");
         this.socket.removeAllListeners("bunniesUpdates");
+        this.socket.removeAllListeners("bunnyDestroyed"
+
+        )
         document.removeEventListener('keydown', this.keydownListener);
         document.removeEventListener('keyup', this.keyupListener);
 

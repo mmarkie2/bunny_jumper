@@ -45,8 +45,8 @@ class Bunny {
     getBunnyUpdate() {
         return {
             clientId: this.clientId,
-            positionsHistory: this.positionsHistory
-
+            positionsHistory: this.positionsHistory,
+isInAir: this.isInAir,
         }
     }
 
@@ -151,7 +151,7 @@ class Bunny {
             bunniesList = []
         }
         for (let bunnysIter of bunniesList) {
-            if (bunnysIter.clientSocketId !== this.clientId) {
+            if (bunnysIter.clientId !== this.clientId) {
                 //top
                 let isTop = false, isBot = false, isLeft = false, isRight = false
                 if (this.getY() < bunnysIter.getY() + this.bunnyH) {
@@ -171,13 +171,30 @@ class Bunny {
                 }
 
                 if (isLeft && isRight && isBot && isTop) {
-                    let offset = this.bunnyW * 1 / 2
 
-                    //bot
-                    if (this.getY() > bunnysIter.getY() + offset) {
 
-                        this.deafeatedBy = bunnysIter.clientSocketId;
+
+
+                    ;
+                    for (let i = 0; i < bunnysIter.positionsHistory.length; ++i) {
+                        let position = bunnysIter.positionsHistory[i];
+                        let previousRelativePosition = Bunny.returnRelativePositionOfSecondObject( this.getX(),  this.getY(),
+                            position.x, position.y, this.bunnyW)
+                        if (previousRelativePosition === 'i') {
+
+
+                        } else {
+                            if (previousRelativePosition === 't') {
+
+                                this.deafeatedBy = bunnysIter.clientId;
+                            }
+                            break
+                        }
+
                     }
+
+                        //
+
 
 
                 }
@@ -233,7 +250,7 @@ class Bunny {
                         ;
                         for (let i = 0; i < this.positionsHistory.length; ++i) {
                             let position = this.positionsHistory[i];
-                            let previousRelativePosition = this.returnRelativePositionOfSecondObject(iterX, iterY,
+                            let previousRelativePosition = Bunny.returnRelativePositionOfSecondObject(iterX, iterY,
                                 position.x, position.y, this.bunnyW)
                             if (previousRelativePosition === 'i') {
 
@@ -271,7 +288,7 @@ class Bunny {
         }
     }
 
-    returnRelativePositionOfSecondObject(x1, y1, x2, y2, blockSize) {
+   static returnRelativePositionOfSecondObject(x1, y1, x2, y2, blockSize) {
 
         let deltaX = x2 - x1;
         let deltaY = y2 - y1;

@@ -33,7 +33,7 @@ class MetaServer {
             console.log('made socket connection', socket.id);
             socket.on("createPlayerRequest", (nick) => {
 
-                this.players.push(new playerModule.Player(nick, socket, this.generateId()));
+                this.players.push(new playerModule.Player(nick, socket, socket.id));
                 socket.emit("playerCreated");
 
 

@@ -10,7 +10,7 @@ class ClientBunny {
         this.bunnyH = bunnyH;
         this.color = color;
         this.imageFacingSide='l';
-
+this.isInAir=true;
         this.img = new Image();
         if (color === "#FF5733") {
             this.img.src = 'assets/bunnyPixelRed.png';
@@ -24,7 +24,7 @@ class ClientBunny {
 
     }
 
-    onNewDataFromServer(positionsHistory) {
+    onNewDataFromServer(positionsHistory,isInAir) {
 let previousX=this.getX();
 
         this.positionsHistory = positionsHistory;
@@ -36,9 +36,17 @@ this.imageFacingSide='r'
         {
             this.imageFacingSide='l'
         }
-
-
+        if(this.isInAir===false && isInAir===true )
+        {
+            this.onJumpListener()
+        }
+        this.isInAir=isInAir
     }
+onJumpListener()
+{
+    var audio = new Audio('assets/jump.mp3');
+    audio.play();
+}
 
     changePosition(x, y) {
         if (this.positionsHistory.length >= this.positionsHistoryLength)
