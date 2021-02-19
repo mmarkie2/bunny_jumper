@@ -46,7 +46,7 @@ class Bunny {
         return {
             clientId: this.clientId,
             positionsHistory: this.positionsHistory,
-isInAir: this.isInAir,
+            isInAir: this.isInAir,
         }
     }
 
@@ -173,12 +173,10 @@ isInAir: this.isInAir,
                 if (isLeft && isRight && isBot && isTop) {
 
 
-
-
                     ;
                     for (let i = 0; i < bunnysIter.positionsHistory.length; ++i) {
                         let position = bunnysIter.positionsHistory[i];
-                        let previousRelativePosition = Bunny.returnRelativePositionOfSecondObject( this.getX(),  this.getY(),
+                        let previousRelativePosition = Bunny.returnRelativePositionOfSecondObject(this.getX(), this.getY(),
                             position.x, position.y, this.bunnyW)
                         if (previousRelativePosition === 'i') {
 
@@ -193,8 +191,7 @@ isInAir: this.isInAir,
 
                     }
 
-                        //
-
+                    //
 
 
                 }
@@ -288,7 +285,7 @@ isInAir: this.isInAir,
         }
     }
 
-   static returnRelativePositionOfSecondObject(x1, y1, x2, y2, blockSize) {
+    static returnRelativePositionOfSecondObject(x1, y1, x2, y2, blockSize) {
 
         let deltaX = x2 - x1;
         let deltaY = y2 - y1;

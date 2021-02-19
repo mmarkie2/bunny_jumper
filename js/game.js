@@ -1,7 +1,7 @@
 let socketModule = require('socket.io');
 let bunnyModule = require('./bunny')
 let mapModule = require('./map')
-let GLOBALModule = require('./../GLOBAL')
+let GLOBALModule = require('../GLOBAL')
 
 class Game {
     gameLoopIntervalId
@@ -88,7 +88,7 @@ class Game {
             if (bunny.deafeatedBy != null) {
                 console.log("destroyed by " + bunny.deafeatedBy)
 
-               this. emitBunnyDestroyed( bunny.clientId);
+                this.emitBunnyDestroyed(bunny.clientId);
                 let idx = this.bunniesList.indexOf(bunny)
                 this.bunniesList.splice(idx, 1);
                 if (this.bunniesList.length == 1) {
@@ -100,12 +100,13 @@ class Game {
         }
 
     }
-    emitBunnyDestroyed(clientId)
-    {
+
+    emitBunnyDestroyed(clientId) {
         for (let iter of this.players) {
             iter.socket.emit("bunnyDestroyed", clientId)
         }
     }
+
     update() {
         for (let bunniesListElement of this.bunniesList) {
             bunniesListElement.update(this.map, this.bunniesList)

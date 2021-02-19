@@ -3,7 +3,7 @@ let playerModule = require('./player');
 var express = require('express');
 let socket = require('socket.io');
 const path = require('path');
-let GLOBALModule = require('./../GLOBAL')
+let GLOBALModule = require('../GLOBAL')
 
 class MetaServer {
 
@@ -84,9 +84,9 @@ class MetaServer {
 
             res.render("indexMain", {lobbyId: "noLobby", serverUrl: GLOBALModule.GLOBAL.BASE_URL});
         });
-        // this.app.get('*', function (req, res) {
-        //     res.render("indexMain", {lobbyId: "noLobby", serverUrl: GLOBALModule.GLOBAL.BASE_URL});
-        // });
+        this.app.get('*', function (req, res) {
+            res.render("indexMain", {lobbyId: "noLobby", serverUrl: GLOBALModule.GLOBAL.BASE_URL});
+        });
 
 
     }

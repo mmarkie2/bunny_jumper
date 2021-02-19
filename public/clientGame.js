@@ -18,7 +18,7 @@ class ClientSideGame {
 
 
                 this.bunniesList[bunniesInit.clientId] = new ClientBunny(bunniesInit.clientId, bunniesInit.bunnyW, bunniesInit.bunnyH, bunniesInit.color);
-          console.log(this.bunniesList)
+                console.log(this.bunniesList)
             }
             console.log(this.bunniesList)
         }
@@ -31,7 +31,7 @@ class ClientSideGame {
             for (let bunniesUpdate of bunniesUpdates) {
 
 
-                this.bunniesList[bunniesUpdate.clientId].onNewDataFromServer(bunniesUpdate.positionsHistory,bunniesUpdate.isInAir);
+                this.bunniesList[bunniesUpdate.clientId].onNewDataFromServer(bunniesUpdate.positionsHistory, bunniesUpdate.isInAir);
             }
         }
         this.socket.on("bunniesUpdates",
@@ -40,12 +40,11 @@ class ClientSideGame {
 
 
         let onBunnyDestroyedListener = (clientId) => {
-            delete  this.bunniesList[clientId];
+            delete this.bunniesList[clientId];
         }
         this.socket.on("bunnyDestroyed",
             onBunnyDestroyedListener
         );
-
 
 
         //prepering canvas for game engine
@@ -157,7 +156,6 @@ class ClientSideGame {
         this.socket.removeAllListeners("bunniesInits");
         this.socket.removeAllListeners("bunniesUpdates");
         this.socket.removeAllListeners("bunnyDestroyed"
-
         )
         document.removeEventListener('keydown', this.keydownListener);
         document.removeEventListener('keyup', this.keyupListener);

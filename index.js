@@ -1,6 +1,4 @@
-
-let metaServerModule=require('./public/metaServer')
-
+let metaServerModule = require('./js/metaServer')
 
 
 require('dns').lookup(require('os').hostname(), function (err, add, fam) {
@@ -8,7 +6,7 @@ require('dns').lookup(require('os').hostname(), function (err, add, fam) {
 })
 
 
-let metaServer=new metaServerModule.MetaServer();
+let metaServer = new metaServerModule.MetaServer();
 
 
 

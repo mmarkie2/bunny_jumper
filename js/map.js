@@ -2,7 +2,7 @@ const fs = require('fs');
 
 class Block {
     constructor(type, isFloor) {
-//types air=a grasss=g  water=w ice-i
+//types air=a grasss=g  water=w ice=i
         this.type = type;
         this.isFloor = isFloor
     }
@@ -69,51 +69,11 @@ class Map {
         return map;
     }
 
-    preRender(ctx) {
-        var m_canvas = document.createElement('canvas');
-        m_canvas.width = this.mapBlocksW * this.blockSize;
-        m_canvas.height = this.mapBlocksH * this.blockSize;
-        var m_context = m_canvas.getContext("2d");
-
-        this.draw(m_context)
-        return m_canvas
-    }
-
-    draw(ctx) {
-
-
-        for (let i = 0; i < this.mapBlocksW; ++i) {
-
-            for (let j = 0; j < this.mapBlocksH; ++j) {
-                let x = i * this.blockSize;
-                let y = j * this.blockSize;
-
-                if (this.blocksList[i][j].type === 'g') {
-                    ctx.fillStyle = "#30dd3e";
-                } else if (this.blocksList[i][j].type === 'i') {
-                    ctx.fillStyle = "#b2dadd";
-                } else if (this.blocksList[i][j].type === 'w') {
-                    ctx.fillStyle = "#2f32dd";
-                } else {
-                    ctx.fillStyle = "#4ebadd";
-                }
-                ctx.fillRect(x, y, this.blockSize, this.blockSize);
-
-            }
-        }
-
-
-    }
 
     mapTemplate() {
 
 
-        // fs.readFile('./public/map.json', (err, data) => {
-        //     if (err) throw err;
-        //     this.blocksList = JSON.parse(data);
-        //     let a;
-        // });
-        let rawdata = fs.readFileSync('./public/map.json');
+        let rawdata = fs.readFileSync('./js/map.json');
         this.blocksList = JSON.parse(rawdata);
         let a;
     }
