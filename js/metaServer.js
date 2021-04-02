@@ -15,7 +15,9 @@ class MetaServer {
         this.app = express();
 
 // Static files
-        this.app.use(express.static('public'));
+
+
+
 
         this.app.set("view engine", "ejs");
 
@@ -26,8 +28,11 @@ class MetaServer {
         this.socketsList = [];
         this.players = [];
         this.lobbys = [];
-//
+
+        this.app.use(express.static(__dirname +'/public'));
         this.routesInit();
+
+
 
         this.io.on('connection', (socket) => {
             this.socketsList.push(socket)
@@ -73,18 +78,17 @@ class MetaServer {
     }
 
     routesInit() {
-        this.app.get('/invite/:lobbyId', function (req, res) {
+        this.app.get('/:lobbyId', function (req, res) {
             let lobbyId = req.params.lobbyId;
             console.log('invite for ', lobbyId);
 
+
             res.render("indexMain", {lobbyId: lobbyId, serverUrl: GLOBALModule.GLOBAL.BASE_URL});
         });
-        this.app.get('/', function (req, res) {
 
-
-            res.render("indexMain", {lobbyId: "noLobby", serverUrl: GLOBALModule.GLOBAL.BASE_URL});
-        });
         this.app.get('*', function (req, res) {
+            console.log('route * ');
+
             res.render("indexMain", {lobbyId: "noLobby", serverUrl: GLOBALModule.GLOBAL.BASE_URL});
         });
 

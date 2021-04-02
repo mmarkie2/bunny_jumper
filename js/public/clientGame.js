@@ -10,7 +10,7 @@ class ClientSideGame {
         this.map = Map.clientConstructor(map);
         this.socket = socket;
         this.bunniesList = {};
-
+        console.log( this.map)
         let onBunniesInitListener = (bunniesInits) => {
             console.log("bunniesInits")
             console.log(bunniesInits)
@@ -30,9 +30,11 @@ class ClientSideGame {
         let onBunniesUpdatesListener = (bunniesUpdates) => {
             for (let bunniesUpdate of bunniesUpdates) {
 
-
                 this.bunniesList[bunniesUpdate.clientId].onNewDataFromServer(bunniesUpdate.positionsHistory, bunniesUpdate.isInAir);
+
+
             }
+
         }
         this.socket.on("bunniesUpdates",
             onBunniesUpdatesListener
@@ -52,6 +54,7 @@ class ClientSideGame {
         this.canvas.width = this.map.mapBlocksW * this.map.blockSize
         this.canvas.height = this.map.mapBlocksH * this.map.blockSize
         this.ctx = this.canvas.getContext("2d");
+
 
         this.mapPreRender = this.map.preRender(this.ctx)
 
@@ -124,7 +127,7 @@ class ClientSideGame {
 
 
     draw() {
-        // console.log("this.isRequestAnimationStopped", this.isRequestAnimationStopped)
+
         if (this.isRequestAnimationStopped === true) {
             // console.log("this.isRequestAnimationStopped===true")
             return;
@@ -139,6 +142,8 @@ class ClientSideGame {
         for (const [key, value] of Object.entries(this.bunniesList)) {
             value.draw(this.ctx)
         }
+
+       
 
         this.requestAnimationFrameId = window.requestAnimationFrame(() => {
             this.draw()

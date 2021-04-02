@@ -1,7 +1,7 @@
 let playerModule = require('./player');
 let gameModule = require('./game');
-let playerSocketlessModule = require('../public/playerSocketless');
-let GLOBALModule = require('../GLOBAL')
+let playerSocketlessModule = require('./playerSocketless');
+let GLOBALModule = require('../../GLOBAL')
 
 class Lobby {
     ownerId
