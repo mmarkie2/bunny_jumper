@@ -70,8 +70,8 @@ class Bunny {
         this.move()
         this.updatePhysic()
         //colision with bunnies
-        this.hitDetectionWithBunnies(bunniesList)
-        this.collisionDetection(map, bunniesList)
+        this.hitDetectionWithBunnies(bunniesList,map)
+        this.collisionDetection(map)
 
 
     }
@@ -146,57 +146,18 @@ class Bunny {
         this.pressedKey = pressedKey
     }
 
-    hitDetectionWithBunnies(bunniesList) {
+    hitDetectionWithBunnies(bunniesList, map) {
+
         if (bunniesList == null) {
             bunniesList = []
         }
-        for (let bunnysIter of bunniesList) {
-            if (bunnysIter.clientId !== this.clientId) {
-                //top
-                let isTop = false, isBot = false, isLeft = false, isRight = false
-                if (this.getY() < bunnysIter.getY() + this.bunnyH) {
-                    isTop = true
-                }
-                //bot
-                if (this.getY() + this.bunnyH > bunnysIter.getY()) {
-                    isBot = true
-                }
-                //left
-                if (this.getX() + this.bunnyW > bunnysIter.getX()) {
-                    isLeft = true
-                }
-                //right
-                if (this.getX() < bunnysIter.getX() + this.bunnyW) {
-                    isRight = true
-                }
+        for (let bunniesIter of bunniesList) {
+            if (bunniesIter.clientId !== this.clientId) {
+               this. checkIfBunnyCollidesAndChangePosition(bunniesIter.getX(), bunniesIter.getY(), map, null, bunniesIter)
 
-                if (isLeft && isRight && isBot && isTop) {
-
-
-                    ;
-                    for (let i = 0; i < bunnysIter.positionsHistory.length; ++i) {
-                        let position = bunnysIter.positionsHistory[i];
-                        let previousRelativePosition = Bunny.returnRelativePositionOfSecondObject(this.getX(), this.getY(),
-                            position.x, position.y, this.bunnyW)
-                        if (previousRelativePosition === 'i') {
-
-
-                        } else {
-                            if (previousRelativePosition === 't') {
-
-                                this.deafeatedBy = bunnysIter.clientId;
-                            }
-                            break
-                        }
-
-                    }
-
-                    //
-
-
-                }
             }
-        }
+
+            }
 
     }
 
@@ -216,73 +177,85 @@ class Bunny {
                 if (blocksIter.type !== 'a') {
                     let iterX = i * map.blockSize
                     let iterY = j * map.blockSize
-
-                    //isInAir
-
-
-                    //top
-                    let isTopOfBunnyPassed = false, isBotOfBunnyPassed = false, isLeftOfBunnyPassed = false,
-                        isRightOfBunnyPassed = false
-
-                    if (this.getY() < iterY + map.blockSize) {
-                        isTopOfBunnyPassed = true
-                    }
-                    //bot
-                    if (this.getY() + this.bunnyH > iterY) {
-                        isBotOfBunnyPassed = true
-                    }
-                    //Right
-                    if (this.getX() + this.bunnyW > iterX) {
-                        isRightOfBunnyPassed = true
-                    }
-                    //Left
-                    if (this.getX() < iterX + map.blockSize) {
-                        isLeftOfBunnyPassed = true
-                    }
-
-
-                    if ((isLeftOfBunnyPassed && isRightOfBunnyPassed) && isTopOfBunnyPassed && isBotOfBunnyPassed) {
-
-                        let lastPosition = {x: this.getX(), y: this.getY()};
-                        ;
-                        for (let i = 0; i < this.positionsHistory.length; ++i) {
-                            let position = this.positionsHistory[i];
-                            let previousRelativePosition = Bunny.returnRelativePositionOfSecondObject(iterX, iterY,
-                                position.x, position.y, this.bunnyW)
-                            if (previousRelativePosition === 'i') {
-
-                                this.positionsHistory.shift();
-                                --i;
-
-                            } else {
-                                if (previousRelativePosition === 't') {
-
-                                    this.changePosition(this.getX(), iterY - this.bunnyH);
-                                    if (blocksIter.isFloor === true) {
-                                        //  console.log("on the floor")
-                                        this.isInAir = false;
-                                        this.vY = 0;
-                                    }
-                                } else if (previousRelativePosition === 'd') {
-                                    this.changePosition(lastPosition.x, iterY + map.blockSize);
-                                    this.vY = 0;
-                                    //disable futher holding up button to stay in air
-                                    this.jumpCounter = 0;
-                                } else if (previousRelativePosition === 'l') {
-                                    this.changePosition(iterX - this.bunnyW, lastPosition.y);
-                                } else if (previousRelativePosition === 'r') {
-                                    this.changePosition(iterX + map.blockSize, lastPosition.y);
-                                }
-                                break;
-                            }
-
-                        }
-
-
-                    }
+                    this.checkIfBunnyCollidesAndChangePosition(iterX, iterY, map, blocksIter, null)
                 }
+
             }
         }
+    }
+
+    checkIfBunnyCollidesAndChangePosition(otherX, otherY, map, blocksIter, otherBunny) {
+
+
+        // top
+        let isTopOfBunnyPassed = false, isBotOfBunnyPassed = false, isLeftOfBunnyPassed = false,
+            isRightOfBunnyPassed = false
+
+        if (this.getY() < otherY + map.blockSize) {
+            isTopOfBunnyPassed = true
+        }
+        //bot
+        if (this.getY() + this.bunnyH > otherY) {
+            isBotOfBunnyPassed = true
+        }
+        //Right
+        if (this.getX() + this.bunnyW > otherX) {
+            isRightOfBunnyPassed = true
+        }
+        //Left
+        if (this.getX() < otherX + map.blockSize) {
+            isLeftOfBunnyPassed = true
+        }
+
+
+        if ((isLeftOfBunnyPassed && isRightOfBunnyPassed) && isTopOfBunnyPassed && isBotOfBunnyPassed) {
+
+            let lastPosition = {x: this.getX(), y: this.getY()};
+            ;
+            for (let i = 0; i < this.positionsHistory.length; ++i) {
+                let position = this.positionsHistory[i];
+                let previousRelativePosition = Bunny.returnRelativePositionOfSecondObject(otherX, otherY,
+                    position.x, position.y, this.bunnyW)
+                if (previousRelativePosition === 'i') {
+
+                    this.positionsHistory.shift();
+                    --i;
+
+                } else {
+                    if (previousRelativePosition === 't') {
+                        if (blocksIter) {
+
+
+                            if (blocksIter.isFloor === true) {
+                                this.changePosition(this.getX(), otherY - this.bunnyH);
+                                //  console.log("on the floor")
+                                this.isInAir = false;
+                                this.vY = 0;
+                            }
+                        }
+                        else if (otherBunny) {
+                            //other bunny destroyed
+                            console.log("defeated")
+                            otherBunny.deafeatedBy=this.clientId;
+                        }
+                    } else if (previousRelativePosition === 'd') {
+                        this.changePosition(lastPosition.x, otherY + map.blockSize);
+                        this.vY = 0;
+                        //disable futher holding up button to stay in air
+                        this.jumpCounter = 0;
+                    } else if (previousRelativePosition === 'l') {
+                        this.changePosition(otherX - this.bunnyW, lastPosition.y);
+                    } else if (previousRelativePosition === 'r') {
+                        this.changePosition(otherX + map.blockSize, lastPosition.y);
+                    }
+                    break;
+                }
+
+            }
+
+
+        }
+
     }
 
     static returnRelativePositionOfSecondObject(x1, y1, x2, y2, blockSize) {

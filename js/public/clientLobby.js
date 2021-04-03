@@ -102,9 +102,11 @@ class Lobby {
     }
 
     clientDisplayLobbyMenu(inviteUrl) {
-        let visibility = 'visible'
+        let startButtonVisibility = 'visible'
+        let waitForOwnerVisibility = 'hidden'
         if (!isClientLobbyOwner) {
-            visibility = 'hidden';
+            startButtonVisibility = 'hidden';
+            waitForOwnerVisibility = 'visible'
         }
         $("#menu").empty()
         $("#menu").append(
@@ -113,7 +115,8 @@ class Lobby {
 
             "<button id=\"copyInviteUrl\" class=\"btn btn-success\">copy invite url</button >\n" +
             "</div>\n" +
-            "<button id=\"startGame\" class=\"btn btn-success\" style='visibility:" + visibility + "'> start Game</button>\n" +
+            "<button id=\"startGame\" class=\"btn btn-success\" style='visibility:" + startButtonVisibility + "'> start Game</button>\n" +
+            "<button  class=\"btn btn-success\" style='visibility:" + waitForOwnerVisibility + "'>please wait for owner to start</button>\n" +
             "<div id=\"players\"  class=\"border border-success rounded-lg\"></div>");
 
         $("#startGame").click(() => {
