@@ -2,7 +2,7 @@ class ClientBunny {
 
 
     //client constructor
-    constructor(clientId, bunnyW, bunnyH, color) {
+    constructor(clientId, bunnyW, bunnyH, color,RESPAWN_INVINCIBILITY_MILLISECONDS) {
 
 
         this.clientId = clientId;
@@ -27,9 +27,15 @@ class ClientBunny {
             this.img.src = 'assets/bunnyPixelBlack.png';
         }
 
+        this.RESPAWN_INVINCIBILITY_MILLISECONDS=RESPAWN_INVINCIBILITY_MILLISECONDS;
+        this.isJustSpawned=false;
 
     }
-
+    onBunnyInvincible()
+    {
+        this.isJustSpawned=true;
+        setTimeout(()=>{  this.isJustSpawned=false; console.log("this.isJustSpawned=false;s")}, this.RESPAWN_INVINCIBILITY_MILLISECONDS)
+    }
     onNewDataFromServer(positionsHistory, isInAir) {
         let previousX = this.getX();
 
@@ -84,7 +90,17 @@ class ClientBunny {
                 scaleOffset = -this.bunnyW;
             }
             ctx.scale(scaleX, 1);
-            ctx.drawImage(this.img, this.getX() * scaleX + scaleOffset, this.getY() - this.bunnyH * 0.5, this.bunnyW * 1.5, this.bunnyH * 1.5);
+            if(this.isJustSpawned)
+            {
+                ctx.globalAlpha = 0.5;
+            }
+            else
+            {
+                ctx.globalAlpha = 1;
+                console.log("ctx.globalAlpha = 1;")
+            }
+            ctx.drawImage(this.img, this.getX() * scaleX + scaleOffset, this.getY() - this.bunnyH * 0.5,
+                this.bunnyW * 1.5, this.bunnyH * 1.5);
             ctx.restore();
         }
 

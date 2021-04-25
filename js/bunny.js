@@ -1,3 +1,4 @@
+let GLOBALModule = require('../GLOBAL')
 class Bunny {
     constructor(positionsHistory, clientId, mapW, mapH, color) {
 
@@ -31,6 +32,8 @@ class Bunny {
         this.jumpCounter = 0
 
         this.deafeatedBy = null;
+        this.isJustSpawned=true;
+        setTimeout(()=>{  this.isJustSpawned=false; }, GLOBALModule.GLOBAL.RESPAWN_INVINCIBILITY_MILLISECONDS)
     }
 
     getBunnyInit() {
@@ -39,6 +42,7 @@ class Bunny {
             bunnyW: this.bunnyW,
             bunnyH: this.bunnyH,
             color: this.color,
+            RESPAWN_INVINCIBILITY_MILLISECONDS: GLOBALModule.GLOBAL.RESPAWN_INVINCIBILITY_MILLISECONDS,
         }
     }
 
@@ -59,11 +63,26 @@ class Bunny {
     }
 
     getX() {
-        return this.positionsHistory[0].x;
+        if(this.positionsHistory[0])
+        {
+            return this.positionsHistory[0].x;
+        }
+        else
+        {
+            return  this.mapW*5;
+        }
+
     }
 
     getY() {
-        return this.positionsHistory[0].y;
+        if(this.positionsHistory[0])
+        {
+            return this.positionsHistory[0].y;
+        }
+        else
+        {
+            return  this.mapW*5;
+        }
     }
 
     update(map, bunniesList) {
@@ -235,8 +254,12 @@ class Bunny {
                         }
                         else if (otherBunny) {
                             //other bunny destroyed
-                            console.log("defeated")
-                            otherBunny.deafeatedBy=this.clientId;
+                            if(!otherBunny.isJustSpawned)
+                            {
+                                console.log("defeated")
+                                otherBunny.deafeatedBy=this.clientId;
+                            }
+
                         }
                     } else if (previousRelativePosition === 'd') {
                         this.changePosition(lastPosition.x, otherY + map.blockSize);

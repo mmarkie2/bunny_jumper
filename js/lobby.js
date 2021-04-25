@@ -29,7 +29,9 @@ class Lobby {
             this.colorPool = ["#FF5733",
                 "#FF33E6",
                 "#E8F616",
-                "#07070a",]
+                "#07070a",
+                "#0650e5",
+                "#21cb21",]
 
             this.addPlayer(ownerPlayer);
             this.sendLobbyInit(this.ownerSocket);
@@ -81,31 +83,17 @@ class Lobby {
         for (let playerIter of this.players) {
             this.emitPlayers(playerIter.socket)
         }
-        if (this.players.length === 4) {
+        if (this.players.length === 6) {
             this.isGameStarted = true;
         }
     }
+bunnyDefeated(destroyerPlayerSocketId)
+{
+    this.updateScoreboard(destroyerPlayerSocketId)
 
-    endRound(winnerPlayerSocketId) {
-        let winnerNick = null;
-        if (winnerPlayerSocketId) {
-            winnerNick = this.players.find(x => x.socket.id === winnerPlayerSocketId).nick
-        }
 
-        for (let playerIter of this.players) {
-            playerIter.socket.emit("endRound", winnerNick)
-        }
-        this.updateScoreboard(winnerPlayerSocketId)
-        if (this.roundsCounter < this.maxRounds) {
-            console.log("Winner")
-            setTimeout(() => this.startNewRound(), 1000);
+}
 
-            this.roundsCounter++;
-        } else {
-            this.endGame()
-        }
-
-    }
 
     endGame() {
         for (let player of this.players) {
@@ -132,6 +120,15 @@ class Lobby {
         for (let playerIter of this.players) {
             this.emitPlayers(playerIter.socket)
         }
+        for (let player of this.players)
+        {
+            if (player.score===GLOBALModule.GLOBAL.MAX_WINS)
+            {
+              this.  game.destructor(winnerPlayerSocketId);
+              break
+            }
+        }
+
     }
 
 

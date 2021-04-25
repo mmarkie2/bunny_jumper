@@ -64,14 +64,10 @@ class Lobby {
             ret.clientSideGame = new ClientSideGame(m, ret.socket);
 
         });
-        ret.socket.on("endRound", (winnerNick) => {
-            console.log("endRound received")
-            ret.clientShowRoundEndScreen(winnerNick)
-            ret.clientSideGame.destructor()
 
-        });
         ret.socket.on("endGame", () => {
             console.log("endGame received")
+            ret.clientSideGame.destructor();
             ret.clientShowGameEndScreen();
 
         });

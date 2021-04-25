@@ -27,6 +27,10 @@ class Game {
             y: this.mapBlocksH * this.blockSize - 4 * this.blockSize
         },
             {
+                x: 6 * this.blockSize,
+                y: this.mapBlocksH * this.blockSize - 4 * this.blockSize
+            },,
+            {
                 x: 11 * this.blockSize,
                 y: this.mapBlocksH * this.blockSize - 4 * this.blockSize
             },
@@ -36,6 +40,10 @@ class Game {
             },
             {
                 x: 17 * this.blockSize,
+                y: 8 * this.blockSize
+            },
+            {
+                x: 19 * this.blockSize,
                 y: 8 * this.blockSize
             }
         ]
@@ -57,6 +65,10 @@ class Game {
                 this.bunniesList.find(x => x.clientId === player.socket.id)?.setPressedKey(pressedKey)
 
             })
+        }
+        for (let player of players)
+        {
+            this.emitBunnyInvincible(player.socket.id);
         }
 
 
@@ -82,18 +94,35 @@ class Game {
 
 
     }
+    emitBunnyInvincible(id) {
 
+        for (let player of this.players) {
+
+            player.socket.emit("bunnyInvincible", id);
+
+        }
+
+
+    }
+static getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
     checkForBunnyDestroyed() {
         for (let bunny of this.bunniesList) {
             if (bunny.deafeatedBy != null) {
                 console.log("destroyed by " + bunny.deafeatedBy)
 
-                this.emitBunnyDestroyed(bunny.clientId);
-                let idx = this.bunniesList.indexOf(bunny)
-                this.bunniesList.splice(idx, 1);
-                if (this.bunniesList.length == 1) {
-                    this.destructor(this.bunniesList[0].clientId);
-                }
+this.parentLobby.bunnyDefeated(bunny.deafeatedBy)
+                let positionHistory = [];
+                positionHistory.push(this.positionPool[Game.getRandomIntInclusive(0,this.positionPool.length-this.positionPool.length)]);
+                this.bunniesList[this.bunniesList.indexOf(bunny)]= new bunnyModule.Bunny(positionHistory,
+                    bunny.clientId, bunny.mapW,
+                    bunny.mapH, bunny.color);
+
+                this.emitBunnyInvincible(bunny.clientId);
+
 
             }
 
@@ -129,9 +158,10 @@ class Game {
 
         for (let player of this.players) {
             player.socket.removeAllListeners("keyPressed");
+
         }
         clearInterval(this.gameLoopIntervalId)
-        this.parentLobby.endRound(winnerPlayerSocketId);
+        this.parentLobby.endGame(winnerPlayerSocketId);
 
     }
 }
